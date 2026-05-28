@@ -11,7 +11,7 @@ const config: Core.Config.Middlewares = [
       origin: [
         'http://localhost:3000',
         'http://127.0.0.1:3000',
-        ...(process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : []),
+        'https://kkn-frontend-alpha.vercel.app/',
       ],
       methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
       headers: ['Content-Type', 'Authorization', 'Origin', 'Accept'],
