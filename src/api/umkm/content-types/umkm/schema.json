@@ -1,0 +1,49 @@
+{
+  "kind": "collectionType",
+  "collectionName": "umkms",
+  "info": {
+    "singularName": "umkm",
+    "pluralName": "umkms",
+    "displayName": "umkm"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "richtext"
+    },
+    "category": {
+      "type": "enumeration",
+      "enum": [
+        "Makanan",
+        "Minuman ",
+        "Kerajinan",
+        "Souvenir",
+        "Jasa",
+        "Lainnya "
+      ]
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "contact": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string"
+    }
+  }
+}

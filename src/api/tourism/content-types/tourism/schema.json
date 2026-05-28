@@ -1,0 +1,44 @@
+{
+  "kind": "collectionType",
+  "collectionName": "tourisms",
+  "info": {
+    "singularName": "tourism",
+    "pluralName": "tourisms",
+    "displayName": "tourism"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "richtext"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "location": {
+      "type": "string"
+    },
+    "category": {
+      "type": "enumeration",
+      "enum": [
+        "Alam",
+        "Budaya",
+        "Kuliner ",
+        "lainnya"
+      ]
+    }
+  }
+}

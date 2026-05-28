@@ -1,0 +1,35 @@
+{
+  "kind": "collectionType",
+  "collectionName": "calendar_events",
+  "info": {
+    "singularName": "calendar-event",
+    "pluralName": "calendar-events",
+    "displayName": "calendar-event"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "richtext"
+    },
+    "event_date": {
+      "type": "date"
+    },
+    "color": {
+      "type": "enumeration",
+      "enum": [
+        "bg-emerald-500",
+        "bg-amber-500",
+        "bg-sky-500",
+        "bg-rose-500",
+        "bg-purple-500"
+      ]
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "kind": "collectionType",
+  "collectionName": "kkn_programs",
+  "info": {
+    "singularName": "kkn-program",
+    "pluralName": "kkn-programs",
+    "displayName": "kkn-program"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "richtext"
+    },
+    "documentation": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "date": {
+      "type": "date"
+    }
+  }
+}
