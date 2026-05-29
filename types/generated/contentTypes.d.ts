@@ -619,6 +619,37 @@ export interface ApiKknProgramKknProgram extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiMangroveMangrove extends Struct.CollectionTypeSchema {
+  collectionName: 'mangroves';
+  info: {
+    displayName: 'Mangrove';
+    pluralName: 'mangroves';
+    singularName: 'mangrove';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    ciri_ciri: Schema.Attribute.RichText;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    foto: Schema.Attribute.Media<'images'>;
+    jenis: Schema.Attribute.String & Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::mangrove.mangrove'
+    > &
+      Schema.Attribute.Private;
+    potensi_pemanfaatan: Schema.Attribute.RichText;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiNewsNews extends Struct.CollectionTypeSchema {
   collectionName: 'newss';
   info: {
@@ -1397,6 +1428,7 @@ declare module '@strapi/strapi' {
       'api::facility.facility': ApiFacilityFacility;
       'api::gallery.gallery': ApiGalleryGallery;
       'api::kkn-program.kkn-program': ApiKknProgramKknProgram;
+      'api::mangrove.mangrove': ApiMangroveMangrove;
       'api::news.news': ApiNewsNews;
       'api::profil.profil': ApiProfilProfil;
       'api::resource-sector.resource-sector': ApiResourceSectorResourceSector;
