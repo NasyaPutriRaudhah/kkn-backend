@@ -1,0 +1,32 @@
+﻿{
+  "kind": "collectionType",
+  "collectionName": "mangroves",
+  "info": {
+    "singularName": "mangrove",
+    "pluralName": "mangroves",
+    "displayName": "Mangrove"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "jenis": {
+      "type": "string",
+      "required": true
+    },
+    "foto": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "ciri_ciri": {
+      "type": "richtext"
+    },
+    "potensi_pemanfaatan": {
+      "type": "richtext"
+    }
+  }
+}
