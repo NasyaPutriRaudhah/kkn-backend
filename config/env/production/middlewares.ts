@@ -1,6 +1,5 @@
 export default [
   'strapi::errors',
-  'strapi::security',
   {
     name: 'strapi::cors',
     config: {
@@ -15,6 +14,7 @@ export default [
       keepHeaderOnError: true,
     },
   },
+  'strapi::security',
   'strapi::poweredBy',
   'strapi::logger',
   'strapi::query',
