@@ -1,0 +1,26 @@
+{
+  "kind": "collectionType",
+  "collectionName": "dokumen-desas",
+  "info": {
+    "singularName": "dokumen-desa",
+    "pluralName": "dokumen-desas",
+    "displayName": "Dokumen Desa"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "nama_dokumen": {
+      "type": "string",
+      "required": true
+    },
+    "file": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "files"
+      ]
+    }
+  }
+}
