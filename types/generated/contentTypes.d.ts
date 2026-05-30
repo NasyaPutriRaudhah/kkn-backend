@@ -477,36 +477,6 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
-export interface ApiDokumenDesaDokumenDesa
-  extends Struct.CollectionTypeSchema {
-  collectionName: 'dokumen_desas';
-  info: {
-    displayName: 'Dokumen Desa';
-    pluralName: 'dokumen-desas';
-    singularName: 'dokumen-desa';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    createdAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    file: Schema.Attribute.Media<'files'>;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
-    localizations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::dokumen-desa.dokumen-desa'
-    > &
-      Schema.Attribute.Private;
-    nama_dokumen: Schema.Attribute.String & Schema.Attribute.Required;
-    publishedAt: Schema.Attribute.DateTime;
-    updatedAt: Schema.Attribute.DateTime;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-  };
-}
-
 export interface ApiCalendarEventCalendarEvent
   extends Struct.CollectionTypeSchema {
   collectionName: 'calendar_events';
@@ -541,6 +511,35 @@ export interface ApiCalendarEventCalendarEvent
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
     title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiDokumenDesaDokumenDesa extends Struct.CollectionTypeSchema {
+  collectionName: 'dokumen-desas';
+  info: {
+    displayName: 'Dokumen Desa';
+    pluralName: 'dokumen-desas';
+    singularName: 'dokumen-desa';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    file: Schema.Attribute.Media<'files'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::dokumen-desa.dokumen-desa'
+    > &
+      Schema.Attribute.Private;
+    nama_dokumen: Schema.Attribute.String & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1454,8 +1453,8 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
-      'api::dokumen-desa.dokumen-desa': ApiDokumenDesaDokumenDesa;
       'api::calendar-event.calendar-event': ApiCalendarEventCalendarEvent;
+      'api::dokumen-desa.dokumen-desa': ApiDokumenDesaDokumenDesa;
       'api::facility.facility': ApiFacilityFacility;
       'api::gallery.gallery': ApiGalleryGallery;
       'api::kkn-program.kkn-program': ApiKknProgramKknProgram;
