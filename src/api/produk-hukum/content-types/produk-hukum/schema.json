@@ -1,10 +1,10 @@
 {
   "kind": "collectionType",
-  "collectionName": "dokumen-desas",
+  "collectionName": "produk-hukums",
   "info": {
-    "singularName": "dokumen-desa",
-    "pluralName": "dokumen-desas",
-    "displayName": "Dokumen Desa"
+    "singularName": "produk-hukum",
+    "pluralName": "produk-hukums",
+    "displayName": "Produk Hukum"
   },
   "options": {
     "draftAndPublish": true

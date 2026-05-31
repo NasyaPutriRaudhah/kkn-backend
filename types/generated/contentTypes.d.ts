@@ -517,35 +517,6 @@ export interface ApiCalendarEventCalendarEvent
   };
 }
 
-export interface ApiDokumenDesaDokumenDesa extends Struct.CollectionTypeSchema {
-  collectionName: 'dokumen-desas';
-  info: {
-    displayName: 'Dokumen Desa';
-    pluralName: 'dokumen-desas';
-    singularName: 'dokumen-desa';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    createdAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    file: Schema.Attribute.Media<'files'>;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
-    localizations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::dokumen-desa.dokumen-desa'
-    > &
-      Schema.Attribute.Private;
-    nama_dokumen: Schema.Attribute.String & Schema.Attribute.Required;
-    publishedAt: Schema.Attribute.DateTime;
-    updatedAt: Schema.Attribute.DateTime;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-  };
-}
-
 export interface ApiFacilityFacility extends Struct.CollectionTypeSchema {
   collectionName: 'facilities';
   info: {
@@ -702,6 +673,35 @@ export interface ApiNewsNews extends Struct.CollectionTypeSchema {
     slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
     thumbnail: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
     title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiProdukHukumProdukHukum extends Struct.CollectionTypeSchema {
+  collectionName: 'produk-hukums';
+  info: {
+    displayName: 'Produk Hukum';
+    pluralName: 'produk-hukums';
+    singularName: 'produk-hukum';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    file: Schema.Attribute.Media<'files'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::produk-hukum.produk-hukum'
+    > &
+      Schema.Attribute.Private;
+    nama_dokumen: Schema.Attribute.String & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1454,12 +1454,12 @@ declare module '@strapi/strapi' {
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
       'api::calendar-event.calendar-event': ApiCalendarEventCalendarEvent;
-      'api::dokumen-desa.dokumen-desa': ApiDokumenDesaDokumenDesa;
       'api::facility.facility': ApiFacilityFacility;
       'api::gallery.gallery': ApiGalleryGallery;
       'api::kkn-program.kkn-program': ApiKknProgramKknProgram;
       'api::mangrove.mangrove': ApiMangroveMangrove;
       'api::news.news': ApiNewsNews;
+      'api::produk-hukum.produk-hukum': ApiProdukHukumProdukHukum;
       'api::profil.profil': ApiProfilProfil;
       'api::resource-sector.resource-sector': ApiResourceSectorResourceSector;
       'api::struktur-organisasi.struktur-organisasi': ApiStrukturOrganisasiStrukturOrganisasi;

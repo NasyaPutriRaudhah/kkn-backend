@@ -11,16 +11,16 @@ export default {
     if (!publicRole) return;
 
     const existing = await strapi.db.query('plugin::users-permissions.permission').findOne({
-      where: { action: 'api::dokumen-desa.dokumen-desa.find', role: publicRole.id },
+      where: { action: 'api::produk-hukum.produk-hukum.find', role: publicRole.id },
     });
 
     if (existing) return;
 
     await strapi.db.query('plugin::users-permissions.permission').create({
-      data: { action: 'api::dokumen-desa.dokumen-desa.find', role: publicRole.id },
+      data: { action: 'api::produk-hukum.produk-hukum.find', role: publicRole.id },
     });
     await strapi.db.query('plugin::users-permissions.permission').create({
-      data: { action: 'api::dokumen-desa.dokumen-desa.findOne', role: publicRole.id },
+      data: { action: 'api::produk-hukum.produk-hukum.findOne', role: publicRole.id },
     });
   },
 };
