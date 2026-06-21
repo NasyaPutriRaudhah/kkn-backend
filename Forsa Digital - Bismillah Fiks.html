@@ -1,0 +1,730 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;600;700;800&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0;}
+  :root{
+    --forest:#1a6b3c;--forest-light:#2d8a52;--forest-pale:#e8f5ee;
+    --sea:#1565a0;--sea-light:#2196c4;--sea-pale:#e3f2fd;
+    --sand:#c8a35a;--sand-pale:#fdf6e8;--bark:#6d3f1f;
+    --leaf:#4caf50;--mangrove:#33691e;--sunset:#e64a19;--gold:#f9a825;
+    --cream:#fefaf2;--ink:#1a1a2e;--ugm:#003366;--ugm-gold:#c8960c;
+  }
+  body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--ink);overflow-x:hidden;}
+
+  #cover{min-height:100vh;background:linear-gradient(160deg,#0d2b0f 0%,#1a4a1e 35%,#0a3d62 75%,#051e3e 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;text-align:center;position:relative;overflow:hidden;}
+  .stars{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;}
+  .star{position:absolute;background:white;border-radius:50%;animation:twinkle 3s infinite alternate;}
+  @keyframes twinkle{from{opacity:.2;transform:scale(.8);}to{opacity:.9;transform:scale(1.2);}}
+  .mangrove-scene{position:absolute;bottom:0;left:0;width:100%;height:40%;display:flex;align-items:flex-end;justify-content:center;overflow:hidden;}
+
+  .ugm-badge{
+    background:rgba(200,150,12,0.15);border:1.5px solid rgba(200,150,12,0.5);
+    color:#f5d06a;font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;
+    padding:6px 20px;border-radius:20px;margin-bottom:10px;animation:fadeSlide 1s ease both;
+    display:inline-flex;align-items:center;gap:7px;
+  }
+  .ugm-dot{width:8px;height:8px;border-radius:50%;background:#f5d06a;display:inline-block;}
+
+  .cover-badge{background:rgba(249,168,37,.18);border:1.5px solid rgba(249,168,37,.5);color:#f9d372;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;padding:6px 20px;border-radius:20px;margin-bottom:20px;animation:fadeSlide 1s ease .1s both;}
+  .cover-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,6vw,3.5rem);font-weight:700;color:#e8f5ee;line-height:1.1;margin-bottom:12px;animation:fadeSlide 1s ease .3s both;}
+  .cover-title span{color:#81c784;font-style:italic;}
+  .cover-subtitle{font-size:clamp(.85rem,2vw,1.05rem);color:#90caf9;font-weight:300;max-width:480px;line-height:1.6;margin-bottom:16px;animation:fadeSlide 1s ease .5s both;}
+
+  .kkn-identity{
+    display:inline-flex;align-items:center;gap:10px;
+    background:rgba(0,51,102,0.45);border:1.5px solid rgba(200,150,12,0.4);
+    border-radius:12px;padding:10px 18px;margin-bottom:20px;
+    animation:fadeSlide 1s ease .65s both;
+  }
+  .kkn-logo-circle{
+    width:38px;height:38px;border-radius:50%;
+    background:linear-gradient(135deg,#c8960c,#f5d06a);
+    display:flex;align-items:center;justify-content:center;
+    font-size:16px;font-weight:900;color:#003366;flex-shrink:0;
+  }
+  .kkn-text-wrap{text-align:left;}
+  .kkn-main{font-size:13px;font-weight:800;color:#f5d06a;letter-spacing:.5px;line-height:1.3;}
+  .kkn-sub{font-size:11px;color:rgba(255,255,255,.6);letter-spacing:.5px;}
+
+  .cover-meta{font-size:12px;color:rgba(255,255,255,.45);letter-spacing:1.5px;text-transform:uppercase;animation:fadeSlide 1s ease .8s both;}
+  .btn-start{margin-top:24px;background:linear-gradient(135deg,#2d8a52,#1a6b3c);color:white;font-family:'Nunito',sans-serif;font-size:15px;font-weight:700;letter-spacing:1px;border:none;border-radius:30px;padding:14px 36px;cursor:pointer;box-shadow:0 4px 20px rgba(45,138,82,.4);animation:fadeSlide 1s ease 1s both,pulse 2.5s ease 2s infinite;transition:transform .2s,box-shadow .2s;}
+  .btn-start:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(45,138,82,.55);}
+  @keyframes fadeSlide{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+  @keyframes pulse{0%,100%{box-shadow:0 4px 20px rgba(45,138,82,.4);}50%{box-shadow:0 4px 30px rgba(45,138,82,.7);}}
+
+  #book{display:none;}
+  .page-nav{position:sticky;top:0;z-index:100;background:rgba(254,250,242,.96);backdrop-filter:blur(8px);border-bottom:2px solid rgba(26,107,60,.12);padding:10px 16px;display:flex;align-items:center;gap:8px;overflow-x:auto;scrollbar-width:none;}
+  .page-nav::-webkit-scrollbar{display:none;}
+  .nav-btn{flex-shrink:0;font-family:'Nunito',sans-serif;font-size:11px;font-weight:700;padding:6px 14px;border-radius:20px;border:1.5px solid rgba(26,107,60,.2);background:transparent;color:var(--forest);cursor:pointer;transition:all .2s;white-space:nowrap;}
+  .nav-btn.active,.nav-btn:hover{background:var(--forest);color:white;border-color:var(--forest);}
+
+  .page-section{display:none;}
+  .page-section.active{display:block;}
+
+  .page-hero{padding:48px 20px 32px;background:linear-gradient(135deg,var(--forest-pale) 0%,white 60%);text-align:center;position:relative;overflow:hidden;}
+  .page-hero::before{content:'';position:absolute;top:-60px;right:-60px;width:240px;height:240px;border-radius:50%;background:rgba(26,107,60,.06);}
+  .hero-icon{font-size:56px;margin-bottom:12px;display:block;animation:float 3.5s ease-in-out infinite;}
+  @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+  .hero-chapter{font-size:10px;font-weight:800;letter-spacing:3px;color:var(--forest);text-transform:uppercase;margin-bottom:8px;opacity:.7;}
+  .hero-title{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,4vw,2.2rem);color:var(--forest);font-weight:700;margin-bottom:12px;line-height:1.2;}
+  .hero-desc{font-size:14px;color:#555;max-width:560px;margin:0 auto;line-height:1.7;}
+
+  .content-wrap{max-width:700px;margin:0 auto;padding:0 16px 60px;}
+  .info-card{background:white;border-radius:16px;border:1.5px solid rgba(26,107,60,.12);padding:20px 22px;margin:20px 0;box-shadow:0 2px 16px rgba(26,107,60,.06);transition:transform .2s,box-shadow .2s;}
+  .info-card:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(26,107,60,.12);}
+  .card-label{font-size:10px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+  .card-label.green{color:var(--forest);}
+  .card-label.blue{color:var(--sea);}
+  .card-label.gold{color:var(--bark);}
+  .card-label::before{content:'';display:inline-block;width:24px;height:3px;border-radius:2px;}
+  .card-label.green::before{background:var(--forest);}
+  .card-label.blue::before{background:var(--sea);}
+  .card-label.gold::before{background:var(--sand);}
+  .card-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;margin-bottom:10px;color:var(--ink);}
+  .card-body{font-size:14px;line-height:1.8;color:#444;}
+  .card-body strong{color:var(--forest);font-weight:700;}
+
+  .quote-block{border-left:4px solid var(--forest);background:var(--forest-pale);padding:16px 20px;border-radius:0 12px 12px 0;margin:20px 0;}
+  .quote-text{font-family:'Playfair Display',serif;font-size:15px;font-style:italic;color:var(--forest);line-height:1.7;}
+  .quote-source{font-size:12px;color:#777;margin-top:8px;font-weight:600;}
+
+  .dialog-scene{background:linear-gradient(135deg,#f0f7f4,#e8f4fd);border-radius:20px;padding:24px 18px;margin:24px 0;border:1.5px dashed rgba(26,107,60,.2);}
+  .dialog-title{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--forest);margin-bottom:18px;text-align:center;opacity:.7;}
+  .dialog-bubble{display:flex;gap:12px;margin-bottom:16px;align-items:flex-start;}
+  .dialog-bubble.right{flex-direction:row-reverse;}
+  .avatar{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;border:2px solid white;box-shadow:0 2px 8px rgba(0,0,0,.12);}
+  .av-ranger{background:linear-gradient(135deg,#2d8a52,#1a6b3c);}
+  .av-student{background:linear-gradient(135deg,#1565a0,#1e88e5);}
+  .av-elder{background:linear-gradient(135deg,#c8a35a,#8d6e3a);}
+  .bubble-wrap{display:flex;flex-direction:column;max-width:78%;}
+  .dialog-bubble.right .bubble-wrap{align-items:flex-end;}
+  .bubble-name{font-size:11px;font-weight:700;color:#666;margin-bottom:4px;}
+  .bubble{padding:12px 16px;border-radius:16px;font-size:13.5px;line-height:1.65;}
+  .bubble.ranger{background:var(--forest);color:white;border-bottom-left-radius:4px;}
+  .bubble.student{background:var(--sea);color:white;border-bottom-right-radius:4px;}
+  .bubble.elder{background:#fff8e1;color:#5d4037;border:1.5px solid rgba(200,163,90,.4);border-bottom-left-radius:4px;}
+
+  .fact-row{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0;}
+  .fact-chip{background:var(--forest-pale);border:1.5px solid rgba(26,107,60,.2);color:var(--forest);font-size:12.5px;font-weight:700;padding:7px 14px;border-radius:20px;display:flex;align-items:center;gap:5px;}
+  .fact-chip.blue{background:var(--sea-pale);border-color:rgba(21,101,160,.2);color:var(--sea);}
+  .fact-chip.gold{background:var(--sand-pale);border-color:rgba(200,163,90,.3);color:var(--bark);}
+
+  .species-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin:20px 0;}
+  .species-card{background:white;border-radius:14px;border:1.5px solid rgba(26,107,60,.12);padding:16px 12px;text-align:center;transition:transform .2s,box-shadow .2s;}
+  .species-card:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,0,0,.1);}
+  .species-icon{font-size:36px;display:block;margin-bottom:8px;}
+  .species-name{font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:var(--forest);margin-bottom:3px;}
+  .species-latin{font-size:11px;color:#888;font-style:italic;margin-bottom:6px;}
+  .species-desc{font-size:11.5px;color:#555;line-height:1.5;}
+
+  .source-box{background:#f9f9f9;border-radius:12px;border:1.5px solid #e0e0e0;padding:14px 18px;margin:24px 0;}
+  .source-title{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:10px;}
+  .source-item{font-size:12px;color:#666;line-height:1.7;padding:3px 0;border-bottom:1px dashed #eee;}
+  .source-item:last-child{border-bottom:none;}
+
+  .section-divider{text-align:center;margin:28px 0 8px;display:flex;align-items:center;gap:12px;}
+  .divider-line{flex:1;height:1.5px;background:linear-gradient(90deg,transparent,rgba(26,107,60,.2),transparent);}
+
+  .cta-block{background:linear-gradient(135deg,var(--forest),#0f4620);border-radius:20px;padding:28px 22px;text-align:center;margin:28px 0;color:white;}
+  .cta-block .big-text{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;margin-bottom:10px;line-height:1.3;}
+  .cta-block .sub-text{font-size:13px;opacity:.82;line-height:1.7;}
+
+  .kkn-strip{
+    background:linear-gradient(135deg,#001f4d,#003366);
+    border-radius:16px;padding:16px 20px;margin:20px 0;
+    display:flex;align-items:center;gap:16px;
+    border:1.5px solid rgba(200,150,12,.3);
+  }
+  .kkn-strip-logo{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#c8960c,#f5d06a);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#003366;flex-shrink:0;}
+  .kkn-strip-text{flex:1;}
+  .kkn-strip-main{font-size:14px;font-weight:800;color:#f5d06a;margin-bottom:3px;}
+  .kkn-strip-sub{font-size:12px;color:rgba(255,255,255,.65);line-height:1.5;}
+  .kkn-strip-badge{background:rgba(200,150,12,.2);border:1px solid rgba(200,150,12,.4);color:#f5d06a;font-size:11px;font-weight:700;padding:5px 12px;border-radius:12px;white-space:nowrap;flex-shrink:0;}
+
+  #back-cover-content{background:linear-gradient(160deg,#0d2b0f 0%,#1a4a1e 40%,#0a3d62 80%,#051e3e 100%);min-height:50vh;padding:48px 20px;text-align:center;color:white;border-radius:16px;margin:24px 0;}
+  .bc-title{font-family:'Playfair Display',serif;font-size:26px;color:#81c784;margin-bottom:12px;}
+  .bc-sub{font-size:14px;color:rgba(255,255,255,.7);line-height:1.7;max-width:480px;margin:0 auto 20px;}
+  .bc-kkn-footer{
+    display:inline-flex;align-items:center;gap:10px;
+    background:rgba(200,150,12,.15);border:1.5px solid rgba(200,150,12,.35);
+    border-radius:14px;padding:12px 20px;margin-bottom:20px;
+  }
+  .bc-kkn-logo{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#c8960c,#f5d06a);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;color:#003366;}
+  .bc-kkn-info{text-align:left;}
+  .bc-kkn-main{font-size:13px;font-weight:800;color:#f5d06a;}
+  .bc-kkn-year{font-size:11px;color:rgba(255,255,255,.55);}
+
+  .progress-bar{height:3px;background:rgba(26,107,60,.12);position:relative;overflow:hidden;}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--forest),var(--leaf));transition:width .4s ease;}
+</style>
+
+<div id="cover">
+  <div class="stars" id="stars-bg"></div>
+  <div class="mangrove-scene">
+    <svg viewBox="0 0 700 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
+      <rect x="0" y="120" width="700" height="100" fill="rgba(21,101,160,0.3)"/>
+      <g opacity="0.9">
+        <line x1="80" y1="220" x2="80" y2="90" stroke="#2d5a27" stroke-width="4"/>
+        <line x1="80" y1="140" x2="50" y2="110" stroke="#2d5a27" stroke-width="2.5"/>
+        <line x1="80" y1="130" x2="115" y2="100" stroke="#2d5a27" stroke-width="2.5"/>
+        <ellipse cx="80" cy="85" rx="35" ry="24" fill="#33691e"/>
+        <ellipse cx="50" cy="108" rx="22" ry="16" fill="#388e3c"/>
+        <ellipse cx="115" cy="96" rx="26" ry="18" fill="#2e7d32"/>
+        <line x1="80" y1="200" x2="60" y2="180" stroke="#2d5a27" stroke-width="1.5"/>
+        <line x1="80" y1="200" x2="100" y2="175" stroke="#2d5a27" stroke-width="1.5"/>
+      </g>
+      <g opacity="0.9">
+        <line x1="200" y1="220" x2="200" y2="100" stroke="#1b5e20" stroke-width="5"/>
+        <line x1="200" y1="145" x2="155" y2="105" stroke="#1b5e20" stroke-width="3"/>
+        <line x1="200" y1="130" x2="245" y2="95" stroke="#1b5e20" stroke-width="3"/>
+        <ellipse cx="200" cy="92" rx="44" ry="30" fill="#2e7d32"/>
+        <ellipse cx="155" cy="100" rx="28" ry="20" fill="#388e3c"/>
+        <ellipse cx="246" cy="90" rx="32" ry="22" fill="#33691e"/>
+        <line x1="200" y1="195" x2="170" y2="160" stroke="#1b5e20" stroke-width="2"/>
+        <line x1="200" y1="195" x2="228" y2="168" stroke="#1b5e20" stroke-width="2"/>
+      </g>
+      <g opacity="0.85">
+        <line x1="580" y1="220" x2="580" y2="95" stroke="#2d5a27" stroke-width="4.5"/>
+        <line x1="580" y1="140" x2="540" y2="105" stroke="#2d5a27" stroke-width="2.8"/>
+        <line x1="580" y1="128" x2="618" y2="98" stroke="#2d5a27" stroke-width="2.8"/>
+        <ellipse cx="580" cy="88" rx="40" ry="27" fill="#33691e"/>
+        <ellipse cx="540" cy="102" rx="25" ry="18" fill="#388e3c"/>
+        <ellipse cx="618" cy="93" rx="28" ry="20" fill="#2e7d32"/>
+      </g>
+      <g opacity="0.7">
+        <line x1="340" y1="220" x2="340" y2="105" stroke="#1b5e20" stroke-width="4"/>
+        <ellipse cx="340" cy="97" rx="38" ry="26" fill="#388e3c"/>
+        <line x1="340" y1="175" x2="315" y2="150" stroke="#1b5e20" stroke-width="2"/>
+        <line x1="340" y1="178" x2="365" y2="152" stroke="#1b5e20" stroke-width="2"/>
+      </g>
+      <ellipse cx="350" cy="145" rx="280" ry="18" fill="rgba(21,101,160,0.15)"/>
+    </svg>
+  </div>
+
+  <div style="position:relative;z-index:2;padding-bottom:150px;">
+    <div class="ugm-badge"><span class="ugm-dot"></span>KKN PPM UGM • Taka Sebatik 2026<span class="ugm-dot"></span></div>
+    <div class="cover-badge">📖 Buku Saku Digital</div>
+    <h1 class="cover-title">FORSA<br><span>DIGITAL</span></h1>
+    <p class="cover-subtitle">Forest Story Digital — Potensi Hutan &amp; Budaya di Pesisir Kecamatan Sebatik Barat, Kalimantan Utara</p>
+    <div class="kkn-identity">
+      <div class="kkn-logo-circle">UGM</div>
+      <div class="kkn-text-wrap">
+        <div class="kkn-main">KKN PPM Universitas Gadjah Mada</div>
+        <div class="kkn-sub">Unit Taka Sebatik · Kalimantan Utara · 2026</div>
+      </div>
+    </div>
+    <div class="cover-meta">Program Kerja Kehutanan &amp; Dokumentasi Budaya Pesisir</div>
+    <button class="btn-start" onclick="openBook()">🌿 Buka Buku Saku</button>
+  </div>
+</div>
+
+<div id="book">
+  <div class="progress-bar"><div class="progress-fill" id="progress" style="width:16.6%"></div></div>
+  <nav class="page-nav">
+    <button class="nav-btn active" onclick="goPage(0)">🏠 Pengantar</button>
+    <button class="nav-btn" onclick="goPage(1)">🌊 Sebatik Barat</button>
+    <button class="nav-btn" onclick="goPage(2)">🌳 Mangrove</button>
+    <button class="nav-btn" onclick="goPage(3)">🌿 Vegetasi Pantai</button>
+    <button class="nav-btn" onclick="goPage(4)">🎭 Budaya</button>
+    <button class="nav-btn" onclick="goPage(5)">📸 Narasi Visual</button>
+  </nav>
+
+  <!-- PAGE 0 -->
+  <div class="page-section active" id="page-0">
+    <div class="page-hero">
+      <span class="hero-icon">🌿</span>
+      <div class="hero-chapter">Halaman Pengantar</div>
+      <h2 class="hero-title">Selamat Datang di FORSA DIGITAL</h2>
+      <p class="hero-desc">Sebuah perjalanan mendokumentasikan keajaiban hutan dan budaya pesisir Sebatik Barat melalui narasi visual yang menginspirasi.</p>
+    </div>
+    <div class="content-wrap">
+
+      <div class="kkn-strip">
+        <div class="kkn-strip-logo">UGM</div>
+        <div class="kkn-strip-text">
+          <div class="kkn-strip-main">KKN PPM Universitas Gadjah Mada</div>
+          <div class="kkn-strip-sub">Unit Taka Sebatik · Kecamatan Sebatik Barat, Kabupaten Nunukan · Kalimantan Utara</div>
+        </div>
+        <div class="kkn-strip-badge">2026</div>
+      </div>
+
+      <div class="info-card">
+        <div class="card-label green">Tentang Program</div>
+        <h3 class="card-title">Apa itu FORSA DIGITAL?</h3>
+        <p class="card-body">
+          <strong>FORSA DIGITAL (Forest Story Digital)</strong> adalah program kerja inovatif yang dirancang dalam kerangka <strong>KKN PPM UGM Unit Taka Sebatik 2026</strong> untuk mendokumentasikan dan menyajikan potensi hutan serta budaya yang ada di pesisir Kecamatan Sebatik Barat dalam bentuk narasi visual yang menarik dan dapat dikenal oleh masyarakat luas.
+        </p>
+        <br>
+        <p class="card-body">
+          Program ini menggabungkan pandangan kehutanan dengan kearifan lokal melalui foto, video singkat, poster, dan infografis yang menyajikan <strong>ekosistem mangrove</strong>, vegetasi pantai, aktivitas masyarakat sekitar, serta nilai budaya setempat.
+        </p>
+      </div>
+
+      <div class="quote-block">
+        <p class="quote-text">"Hutan bukan sekadar pohon — ia adalah warisan hidup yang menyimpan cerita generasi. Saatnya kita rekam, lestarikan, dan bagikan kepada dunia."</p>
+        <p class="quote-source">— Semangat Program FORSA DIGITAL · KKN PPM UGM Taka Sebatik 2026</p>
+      </div>
+
+      <div class="dialog-scene">
+        <div class="dialog-title">💬 Dialog Perkenalan</div>
+        <div class="dialog-bubble">
+          <div class="avatar av-student">🎓</div>
+          <div class="bubble-wrap">
+            <div class="bubble-name">Mahasiswa KKN PPM UGM</div>
+            <div class="bubble student">Kak, kenapa kita perlu mendokumentasikan hutan dan budaya Sebatik ini secara digital?</div>
+          </div>
+        </div>
+        <div class="dialog-bubble right">
+          <div class="avatar av-ranger">🌲</div>
+          <div class="bubble-wrap">
+            <div class="bubble-name">Penyuluh Kehutanan</div>
+            <div class="bubble ranger">Ekosistem mangrove Sebatik menyimpan keanekaragaman hayati yang belum banyak orang tahu! Kalau tidak kita dokumentasikan sekarang, pengetahuan itu bisa hilang bersama perubahan zaman. <strong>FORSA DIGITAL hadir untuk menjembatani ilmu dengan cerita.</strong></div>
+          </div>
+        </div>
+        <div class="dialog-bubble">
+          <div class="avatar av-elder">👴</div>
+          <div class="bubble-wrap">
+            <div class="bubble-name">Tetua Masyarakat Sebatik</div>
+            <div class="bubble elder">Benar sekali, nak. Nenek moyang kami telah menjaga hutan ini dengan adat dan tradisi. Kalau adik-adik dari UGM mau merekam dan menyebarkan ceritanya — itulah cara terbaik melestarikan warisan kami untuk anak cucu.</div>
+          </div>
+        </div>
+        <div class="dialog-bubble right">
+          <div class="avatar av-student">🎓</div>
+          <div class="bubble-wrap">
+            <div class="bubble-name">Mahasiswa KKN PPM UGM</div>
+            <div class="bubble student">Sebagai bagian dari KKN PPM UGM Taka Sebatik 2026, kami siap menjadi jembatan antara ilmu pengetahuan dan kearifan lokal Sebatik! 🌿</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="card-label green">Tujuan Program</div>
+        <h3 class="card-title">Mengapa Program Ini Penting?</h3>
+        <p class="card-body">Kecamatan Sebatik Barat memiliki posisi strategis sebagai wilayah perbatasan Indonesia–Malaysia yang menyimpan kekayaan ekologis dan budaya luar biasa. Namun, potensi ini belum terdokumentasi secara sistematis. <strong>FORSA DIGITAL hadir untuk mengubah itu.</strong></p>
+        <br>
+        <div class="fact-row">
+          <div class="fact-chip">🌿 Ekosistem Mangrove</div>
+          <div class="fact-chip blue">🏘️ Kearifan Lokal</div>
+          <div class="fact-chip gold">📸 Narasi Visual</div>
+          <div class="fact-chip">🌊 Vegetasi Pantai</div>
+          <div class="fact-chip blue">🎭 Budaya Pesisir</div>
+          <div class="fact-chip gold">📱 Media Digital</div>
+        </div>
+      </div>
+
+      <div class="cta-block">
+        <div class="big-text">Mari Jelajahi Keajaiban Sebatik Barat! 🌴</div>
+        <div class="sub-text">Setiap halaman buku saku ini adalah jendela menuju kekayaan alam dan budaya yang menakjubkan. Dipersembahkan oleh mahasiswa KKN PPM UGM Unit Taka Sebatik 2026 — dengan sepenuh hati untuk Sebatik dan Indonesia.</div>
+      </div>
+
+      <div class="source-box">
+        <div class="source-title">📚 Dasar Referensi</div>
+        <div class="source-item">Kementerian LHK. (2021). <em>Peta Mangrove Nasional Indonesia</em>. Jakarta: KLHK.</div>
+        <div class="source-item">Wahyudi, A.J. et al. (2020). Ekosistem mangrove Indonesia: tinjauan status dan ancaman. <em>Jurnal Pengelolaan Sumberdaya Alam dan Lingkungan</em>, 10(3), 493–507.</div>
+        <div class="source-item">Kusmana, C. (2014). Distribution and current status of mangrove forests in Indonesia. <em>Mangrove Ecosystems of Asia</em>, 37–60. Springer.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 1 -->
+  <div class="page-section" id="page-1">
+    <div class="page-hero" style="background:linear-gradient(135deg,#e3f2fd 0%,white 60%);">
+      <span class="hero-icon">🏝️</span>
+      <div class="hero-chapter">Bab I</div>
+      <h2 class="hero-title" style="color:var(--sea);">Mengenal Sebatik Barat</h2>
+      <p class="hero-desc">Pulau di ujung timur Kalimantan Utara — tanah perbatasan yang menyimpan kekayaan alam dan budaya yang belum banyak diketahui dunia.</p>
+    </div>
+    <div class="content-wrap">
+      <div class="kkn-strip">
+        <div class="kkn-strip-logo">UGM</div>
+        <div class="kkn-strip-text">
+          <div class="kkn-strip-main">Wilayah Penugasan KKN PPM UGM</div>
+          <div class="kkn-strip-sub">Unit Taka Sebatik · Kec. Sebatik Barat, Kab. Nunukan, Kalimantan Utara · 2026</div>
+        </div>
+        <div class="kkn-strip-badge">Lokasi KKN</div>
+      </div>
+      <div class="info-card">
+        <div class="card-label blue">Profil Wilayah</div>
+        <h3 class="card-title">Sebatik Barat: Tanah Perbatasan yang Istimewa</h3>
+        <p class="card-body">Kecamatan Sebatik Barat merupakan salah satu wilayah dalam Pulau Sebatik, Kabupaten Nunukan, Provinsi Kalimantan Utara. Secara geografis, pulau ini terbagi dua oleh garis perbatasan internasional antara <strong>Indonesia dan Malaysia</strong>, menjadikannya sebagai salah satu pulau terluar Indonesia yang unik dan strategis.</p>
+        <br>
+        <p class="card-body">Wilayah pesisir Sebatik Barat dicirikan oleh garis pantai yang bervariasi — dari pantai berpasir, pantai berbatu, hingga kawasan mangrove yang lebat. Kondisi ini menciptakan habitat yang kaya bagi berbagai jenis flora dan fauna, sekaligus menjadi sumber penghidupan bagi masyarakat nelayan sekitarnya.</p>
+      </div>
+      <div class="quote-block" style="border-left-color:var(--sea);background:var(--sea-pale);">
+        <p class="quote-text" style="color:var(--sea);">"Sebatik bukan hanya soal garis batas negara — ia adalah contoh nyata bagaimana alam dan manusia bisa hidup berdampingan di wilayah paling ujung tanah air. Justru di sinilah Indonesia perlu hadir lebih kuat melalui pemberdayaan budaya dan dokumentasi lingkungan."</p>
+        <p class="quote-source">— Direktorat Jenderal Perbatasan, Kemendagri (2022) · Dikaji oleh Tim KKN PPM UGM Taka Sebatik 2026</p>
+      </div>
+      <div class="dialog-scene">
+        <div class="dialog-title">💬 Mengenal Tanah Sebatik</div>
+        <div class="dialog-bubble">
+          <div class="avatar av-student">🎓</div>
+          <div class="bubble-wrap">
+            <div class="bubble-name">Mahasiswa KKN PPM UGM Taka Sebatik</div>
+            <div class="bubble student">Pak, saya baru pertama kali ke Sebatik. Apa yang membuat wilayah ini begitu spesial dibanding pulau-pulau lain di Indonesia?</div>
+          </div>
+        </div>
+        <div class="dialog-bubble right">
+          <div class="avatar av-elder">👴</div>
+          <div class="bubble-wrap">
+            <div class="bubble-name">Pak Hamid, Nelayan Senior</div>
+            <div class="bubble elder">Ha, banyak orang tidak tahu nak! Sebatik itu istimewa karena <strong>alam dan budayanya hidup bersamaan</strong> dengan cara yang unik. Di sini mangrovenya tebal, ikannya melimpah, dan orang-orangnya hidup berdampingan antara dua negara sudah turun-temurun.</div>
+          </div>
+        </div>
+        <div class="dialog-bubble">
+          <div class="avatar av-ranger">🌲</div>
+          <div class="bubble-wrap">
+            <div class="bubble-name">Penyuluh Kehutanan</div>
+            <div class="bubble ranger">Betul! Dari sisi ekologi, Sebatik Barat menyimpan spesies mangrove yang bernilai tinggi secara ekologis maupun ekonomi. <strong>Sayang kalau tidak kita dokumentasikan — dan KKN PPM UGM hadir tepat untuk itu!</strong></div>
+          </div>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="card-label blue">Fakta Menarik</div>
+        <h3 class="card-title">Sebatik dalam Angka dan Fakta</h3>
+        <div class="fact-row">
+          <div class="fact-chip blue">🗺️ Luas ±246 km²</div>
+          <div class="fact-chip blue">🌊 Pesisir Perbatasan RI-Malaysia</div>
+          <div class="fact-chip gold">👥 Multi-etnis: Tidung, Bugis, Jawa</div>
+          <div class="fact-chip">🌿 Mangrove Tebal di Pesisir Barat</div>
+          <div class="fact-chip gold">🐟 Zona Tangkap Ikan Produktif</div>
+          <div class="fact-chip blue">🏔️ Kab. Nunukan, Kalimantan Utara</div>
+        </div>
+      </div>
+      <div class="source-box">
+        <div class="source-title">📚 Referensi</div>
+        <div class="source-item">BPS Kabupaten Nunukan. (2023). <em>Kecamatan Sebatik Barat dalam Angka 2023</em>. Nunukan: BPS.</div>
+        <div class="source-item">Kemendagri. (2022). <em>Profil Wilayah Perbatasan Pulau Sebatik</em>. Jakarta: Ditjen Bina Pemerintahan Desa.</div>
+        <div class="source-item">Dephut RI. (2019). <em>Rencana Pengelolaan Hutan Lindung Sebatik</em>. Jakarta: Kementerian Kehutanan.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 2 -->
+  <div class="page-section" id="page-2">
+    <div class="page-hero" style="background:linear-gradient(135deg,var(--forest-pale) 0%,white 60%);">
+      <span class="hero-icon">🌳</span>
+      <div class="hero-chapter">Bab II</div>
+      <h2 class="hero-title">Ekosistem Mangrove</h2>
+      <p class="hero-desc">Benteng hijau di antara laut dan darat — mangrove Sebatik Barat adalah jantung dari keseimbangan alam pesisir yang perlu kita jaga bersama.</p>
+    </div>
+    <div class="content-wrap">
+      <div class="info-card">
+        <div class="card-label green">Ilmu Pengetahuan</div>
+        <h3 class="card-title">Apa Itu Ekosistem Mangrove?</h3>
+        <p class="card-body">Mangrove adalah komunitas tumbuhan berkayu yang tumbuh di daerah pasang-surut pesisir tropis dan subtropis. Ekosistem ini merupakan salah satu ekosistem paling produktif di dunia — dengan kemampuan menyimpan karbon (<em>blue carbon</em>) yang jauh melampaui hutan darat. Di pesisir Sebatik Barat, <strong>mangrove berfungsi sebagai garis pertahanan alami</strong> terhadap abrasi, gelombang, dan badai sekaligus sebagai tempat berkembang biak berbagai spesies ikan bernilai ekonomi tinggi.</p>
+        <br>
+        <p class="card-body">Menurut Donato et al. (2011), hutan mangrove Indonesia menyimpan rata-rata <strong>1.023 Mg C ha⁻¹</strong> — menjadikannya penyimpan karbon per-hektar tertinggi di antara semua ekosistem hutan tropis.</p>
+      </div>
+      <div class="species-grid">
+        <div class="species-card"><span class="species-icon">🌱</span><div class="species-name">Bakau</div><div class="species-latin">Rhizophora apiculata</div><div class="species-desc">Dominan di pesisir, akar tunjang unik, habitat ikan dan kepiting</div></div>
+        <div class="species-card"><span class="species-icon">🌿</span><div class="species-name">Api-api</div><div class="species-latin">Avicennia marina</div><div class="species-desc">Pionir reklamasi, tumbuh di zona pasang surut ekstrem</div></div>
+        <div class="species-card"><span class="species-icon">🍃</span><div class="species-name">Pedada</div><div class="species-latin">Sonneratia alba</div><div class="species-desc">Buah dapat dimakan, penting untuk kelelawar penyerbuk</div></div>
+        <div class="species-card"><span class="species-icon">🌾</span><div class="species-name">Tancang</div><div class="species-latin">Bruguiera gymnorrhiza</div><div class="species-desc">Kayu keras, digunakan lokal untuk bahan bangunan</div></div>
+      </div>
+      <div class="quote-block">
+        <p class="quote-text">"Mangrove adalah laboratorium alam yang hidup. Kehilangan satu hektar mangrove bukan hanya hilangnya pohon, tapi runtuhnya fondasi ekosistem yang menopang ribuan makhluk dan jutaan manusia pesisir."</p>
+        <p class="quote-source">— Giri et al., 2011. Global distribution and conservation of mangrove forests. <em>Endangered Species Research</em>, 15(1), 1–13.</p>
+      </div>
+      <div class="dialog-scene">
+        <div class="dialog-title">💬 Belajar dari Mangrove</div>
+        <div class="dialog-bubble">
+          <div class="avatar av-student">🎓</div>
+          <div class="bubble-wrap">
+            <div class="bubble-name">Mahasiswa KKN PPM UGM</div>
+            <div class="bubble student">Kak Ranger, tadi saya lihat ada nelayan yang memotong beberapa pohon mangrove. Apa itu tidak merusak ekosistem?</div>
+          </div>
+        </div>
+        <div class="dialog-bubble right">
+          <div class="avatar av-ranger">🌲</div>
+          <div class="bubble-wrap">
+            <div class="bubble-name">Penyuluh Kehutanan</div>
+            <div class="bubble ranger"><strong>Masalahnya ketika dilakukan berlebihan tanpa rotasi.</strong> Sebatik punya kearifan lokal yang mengatur kapan dan berapa banyak yang boleh diambil. Itu contoh nyata pengelolaan berbasis ekosistem yang perlu kita dokumentasikan!</div>
+          </div>
+        </div>
+        <div class="dialog-bubble">
+          <div class="avatar av-elder">👴</div>
+          <div class="bubble-wrap">
+            <div class="bubble-name">Pak Hamid</div>
+            <div class="bubble elder">Sejak kecil saya sudah diajarkan — <em>"jangan ambil lebih dari yang kamu butuhkan, dan jangan pernah tebang pohon yang masih muda."</em> Itu bukan aturan tertulis, tapi mendarah daging di sini.</div>
+          </div>
+        </div>
+      </div>
+      <div class="source-box">
+        <div class="source-title">📚 Referensi Ilmiah</div>
+        <div class="source-item">Donato, D.C. et al. (2011). Mangroves among the most carbon-rich forests in the tropics. <em>Nature Geoscience</em>, 4(5), 293–297.</div>
+        <div class="source-item">Giri, C. et al. (2011). Status and distribution of mangrove forests of the world. <em>Global Ecology and Biogeography</em>, 20(1), 154–159.</div>
+        <div class="source-item">Noor, Y.R., Khazali, M., &amp; Suryadiputra, I.N.N. (2006). <em>Panduan Pengenalan Mangrove di Indonesia</em>. Bogor: Wetlands International.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 3 -->
+  <div class="page-section" id="page-3">
+    <div class="page-hero" style="background:linear-gradient(135deg,#f1f8e9 0%,white 60%);">
+      <span class="hero-icon">🌴</span>
+      <div class="hero-chapter">Bab III</div>
+      <h2 class="hero-title" style="color:var(--mangrove);">Vegetasi Pantai Sebatik</h2>
+      <p class="hero-desc">Di balik garis pantai Sebatik Barat, tumbuh-tumbuhan tangguh menjaga keseimbangan antara laut dan darat — masing-masing dengan peran uniknya.</p>
+    </div>
+    <div class="content-wrap">
+      <div class="info-card">
+        <div class="card-label green">Ilmu Pengetahuan</div>
+        <h3 class="card-title">Zonasi Vegetasi Pantai</h3>
+        <p class="card-body">Vegetasi pantai terbagi dalam zonasi berdasarkan jarak dari garis laut dan toleransi terhadap salinitas. <strong>Zona terdepan</strong> dihuni mangrove yang toleran garam ekstrem. Di belakangnya terdapat <strong>zona peralihan (ecotone)</strong> dengan vegetasi seperti Nipah (<em>Nypa fruticans</em>) yang menjadi penghasil gula tradisional. Lebih ke darat, tumbuh formasi <strong>Barringtonia-Pes-caprae</strong> yang tahan terhadap angin laut dan semprotan air asin.</p>
+      </div>
+      <div class="species-grid">
+        <div class="species-card"><span class="species-icon">🥥</span><div class="species-name">Kelapa Pantai</div><div class="species-latin">Cocos nucifera</div><div class="species-desc">Multifungsi, penanda budaya, sumber pangan utama pesisir</div></div>
+        <div class="species-card"><span class="species-icon">🌿</span><div class="species-name">Nipah</div><div class="species-latin">Nypa fruticans</div><div class="species-desc">Penghasil gula dan atap rumah tradisional masyarakat</div></div>
+        <div class="species-card"><span class="species-icon">🌺</span><div class="species-name">Ketapang</div><div class="species-latin">Terminalia catappa</div><div class="species-desc">Pohon peneduh, buah dimakan, daun obat tradisional</div></div>
+        <div class="species-card"><span class="species-icon">🌱</span><div class="species-name">Kangkung Laut</div><div class="species-latin">Ipomoea pes-caprae</div><div class="species-desc">Stabilisator pasir pantai, penutup tanah alami yang vital</div></div>
+        <div class="species-card"><span class="species-icon">🍃</span><div class="species-name">Pandan Laut</div><div class="species-latin">Pandanus odoratissimus</div><div class="species-desc">Bahan anyaman tradisional, aroma khas, tumbuh di tepi pantai</div></div>
+        <div class="species-card"><span class="species-icon">🌾</span><div class="species-name">Cemara Laut</div><div class="species-latin">Casuarina equisetifolia</div><div class="species-desc">Penahan angin dan abrasi, kayu berkualitas tinggi</div></div>
+      </div>
+      <div class="dialog-scene">
+        <div class="dialog-title">💬 Menelusuri Vegetasi Bersama</div>
+        <div class="dialog-bubble">
+          <div class="avatar av-student">🎓</div>
+          <div class="bubble-wrap">
+            <div class="bubble-name">Mahasiswa KKN PPM UGM</div>
+            <div class="bubble student">Bu, daun apa ini? Saya lihat banyak tumbuh di sepanjang pantai, daunnya seperti hati ganda...</div>
+          </div>
+        </div>
+        <div class="dialog-bubble right">
+          <div class="avatar av-elder">👴</div>
+          <div class="bubble-wrap">
+            <div class="bubble-name">Ibu Salmah, Petani Pesisir</div>
+            <div class="bubble elder">Oh itu <em>Tapak Kuda</em> — Ipomoea pes-caprae. Nenek moyang kami menyebutnya <strong>"penjaga pantai yang setia"</strong>. Akarnya menjalar dan mengikat pasir agar tidak terbawa ombak. Daunnya juga bisa untuk obat kulit terkena ubur-ubur!</div>
+          </div>
+        </div>
+        <div class="dialog-bubble">
+          <div class="avatar av-ranger">🌲</div>
+          <div class="bubble-wrap">
+            <div class="bubble-name">Penyuluh Kehutanan</div>
+            <div class="bubble ranger">Tepat sekali! Ipomoea pes-caprae memang <strong>tumbuhan pionir pantai berpasir</strong> yang sangat penting. Penelitian membuktikan efektivitasnya mengurangi erosi pantai hingga 60% pada daerah dengan tutupan rapat!</div>
+          </div>
+        </div>
+        <div class="dialog-bubble right">
+          <div class="avatar av-student">🎓</div>
+          <div class="bubble-wrap">
+            <div class="bubble-name">Mahasiswa KKN PPM UGM</div>
+            <div class="bubble student">Ada ilmu tradisional DAN ilmu modern yang membuktikan hal yang sama! Ini yang harus kita rekam di FORSA DIGITAL KKN PPM UGM kita! 📸</div>
+          </div>
+        </div>
+      </div>
+      <div class="source-box">
+        <div class="source-title">📚 Referensi</div>
+        <div class="source-item">Tjitrosoedirdjo, S.S. (2016). Ekologi tumbuhan pantai berpasir di Kalimantan. <em>Jurnal Biologi Indonesia</em>, 12(1), 45–58.</div>
+        <div class="source-item">Setyawan, A.D. &amp; Winarno, K. (2006). Pemanfaatan langsung ekosistem mangrove di Jawa Tengah. <em>Biodiversitas</em>, 7(3), 282–291.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 4 -->
+  <div class="page-section" id="page-4">
+    <div class="page-hero" style="background:linear-gradient(135deg,var(--sand-pale) 0%,white 60%);">
+      <span class="hero-icon">🎭</span>
+      <div class="hero-chapter">Bab IV</div>
+      <h2 class="hero-title" style="color:var(--bark);">Budaya &amp; Kearifan Lokal</h2>
+      <p class="hero-desc">Di balik kerimbunan mangrove dan derasnya gelombang, tersimpan kearifan yang telah menjaga keseimbangan alam Sebatik selama berabad-abad.</p>
+    </div>
+    <div class="content-wrap">
+      <div class="info-card">
+        <div class="card-label gold">Masyarakat &amp; Budaya</div>
+        <h3 class="card-title">Masyarakat Pesisir Sebatik: Multietnis yang Harmonis</h3>
+        <p class="card-body">Masyarakat Sebatik Barat merupakan komunitas multietnis yang terdiri atas suku <strong>Tidung</strong> (sebagai penduduk asli), suku <strong>Bugis</strong> (pelaut dan pedagang ulung), serta berbagai etnis pendatang lainnya. Keberagaman ini memperkaya khazanah budaya lokal melalui proses akulturasi yang damai selama ratusan tahun.</p>
+        <br>
+        <p class="card-body">Kearifan lokal masyarakat Sebatik dalam mengelola sumber daya alam pesisir tercermin dalam berbagai praktik tradisional: mulai dari <strong>aturan panen ikan musiman</strong>, <strong>ritual sebelum melaut</strong>, hingga <strong>pantangan tertentu</strong> yang secara tidak langsung berfungsi sebagai mekanisme konservasi ekologis.</p>
+      </div>
+      <div class="quote-block" style="border-left-color:var(--sand);background:var(--sand-pale);">
+        <p class="quote-text" style="color:var(--bark);">"Kearifan lokal bukan mitos belaka — ia adalah ilmu yang lahir dari pengamatan panjang dan diuji oleh waktu. Ketika sains modern akhirnya membuktikan apa yang nenek moyang kita sudah tahu sejak dulu, itulah saat kita seharusnya merunduk hormat pada pengetahuan leluhur."</p>
+        <p class="quote-source">— Berkes, F. (2012). <em>Sacred Ecology</em>. Routledge. · Direfleksikan oleh Tim KKN PPM UGM Taka Sebatik 2026</p>
+      </div>
+      <div class="dialog-scene">
+        <div class="dialog-title">💬 Kearifan yang Diwariskan</div>
+        <div class="dialog-bubble">
+          <div class="avatar av-student">🎓</div>
+          <div class="bubble-wrap">
+            <div class="bubble-name">Mahasiswa KKN PPM UGM Taka Sebatik</div>
+            <div class="bubble student">Kek, saya dengar ada tradisi khusus sebelum nelayan berangkat melaut di sini. Boleh ceritakan?</div>
+          </div>
+        </div>
+        <div class="dialog-bubble right">
+          <div class="avatar av-elder">👴</div>
+          <div class="bubble-wrap">
+            <div class="bubble-name">Kakek Daud, Pemuka Adat Tidung</div>
+            <div class="bubble elder">Ohhh, itu <strong>Ritual Mappadendang</strong> — sebelum musim tangkap tiba, kami berkumpul, berdoa, dan membacakan syair-syair leluhur di tepi pantai. Intinya: meminta izin kepada alam dan berjanji tidak akan mengambil lebih dari yang dibutuhkan.</div>
+          </div>
+        </div>
+        <div class="dialog-bubble">
+          <div class="avatar av-ranger">🌲</div>
+          <div class="bubble-wrap">
+            <div class="bubble-name">Penyuluh Kehutanan</div>
+            <div class="bubble ranger">Dari perspektif ilmu lingkungan, ritual seperti ini sangat efektif sebagai <strong>mekanisme regulasi sosial terhadap eksploitasi sumber daya!</strong> Komunitas yang masih mempraktikkan ritual serupa memiliki stok ikan yang lebih stabil.</div>
+          </div>
+        </div>
+        <div class="dialog-bubble right">
+          <div class="avatar av-elder">👴</div>
+          <div class="bubble-wrap">
+            <div class="bubble-name">Kakek Daud</div>
+            <div class="bubble elder">Kami sangat senang adik-adik dari UGM ada di sini untuk mendokumentasikan semua ini. Jangan sampai warisan kami hilang ditelan zaman!</div>
+          </div>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="card-label gold">Nilai Budaya</div>
+        <h3 class="card-title">Kearifan Lokal yang Perlu Didokumentasikan</h3>
+        <div class="fact-row">
+          <div class="fact-chip gold">🎵 Nyanyian Nelayan Tradisional</div>
+          <div class="fact-chip gold">🙏 Ritual Sebelum Melaut</div>
+          <div class="fact-chip">💊 Tanaman Obat Pesisir</div>
+          <div class="fact-chip gold">🎣 Teknik Memancing Tradisional</div>
+          <div class="fact-chip">🏠 Arsitektur Rumah Pantai</div>
+          <div class="fact-chip gold">🎨 Kerajinan dari Nipah &amp; Pandan</div>
+        </div>
+      </div>
+      <div class="source-box">
+        <div class="source-title">📚 Referensi</div>
+        <div class="source-item">Berkes, F. (2012). <em>Sacred Ecology: Traditional Ecological Knowledge and Resource Management</em> (3rd ed.). Routledge.</div>
+        <div class="source-item">Ginting, L. &amp; Purnomo, H. (2018). Kearifan lokal masyarakat Tidung dalam pengelolaan hutan mangrove. <em>Jurnal Ilmu Kehutanan</em>, 12(2), 120–133.</div>
+        <div class="source-item">Suhartini. (2009). Kajian kearifan lokal masyarakat dalam pengelolaan sumber daya alam. <em>Prosiding Seminar Nasional UNY</em>. Yogyakarta: UNY Press.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 5 -->
+  <div class="page-section" id="page-5">
+    <div class="page-hero" style="background:linear-gradient(135deg,#e8eaf6 0%,white 60%);">
+      <span class="hero-icon">📸</span>
+      <div class="hero-chapter">Bab V — Panduan Implementasi</div>
+      <h2 class="hero-title" style="color:#3949ab;">Narasi Visual &amp; Aksi Nyata</h2>
+      <p class="hero-desc">Dari halaman buku ke dunia nyata — panduan praktis untuk mewujudkan FORSA DIGITAL sebagai gerakan dokumentasi yang berdampak.</p>
+    </div>
+    <div class="content-wrap">
+      <div class="info-card">
+        <div class="card-label" style="color:#3949ab;">Strategi Dokumentasi</div>
+        <h3 class="card-title">Narasi Visual yang Bercerita, Bukan Sekadar Foto</h3>
+        <p class="card-body">Narasi visual yang efektif bukan hanya soal keindahan estetika — ia harus <strong>menceritakan sesuatu yang menggerakkan</strong>. Pendekatan <strong>Photovoice</strong> (Wang &amp; Burris, 1997) memberikan kamera kepada masyarakat lokal untuk mendokumentasikan perspektif mereka sendiri — teknik ini terbukti menghasilkan konten yang lebih autentik dan lebih efektif dalam menggerakkan perubahan sosial.</p>
+      </div>
+      <div class="dialog-scene">
+        <div class="dialog-title">💬 Diskusi Strategi Konten Tim KKN PPM UGM</div>
+        <div class="dialog-bubble">
+          <div class="avatar av-student">🎓</div>
+          <div class="bubble-wrap">
+            <div class="bubble-name">Tim FORSA DIGITAL · KKN PPM UGM</div>
+            <div class="bubble student">Kak, konten apa yang paling efektif untuk platform digital? Kita mau jangkau anak muda juga kan, bukan hanya akademisi?</div>
+          </div>
+        </div>
+        <div class="dialog-bubble right">
+          <div class="avatar av-ranger">🌲</div>
+          <div class="bubble-wrap">
+            <div class="bubble-name">Koordinator Program</div>
+            <div class="bubble ranger"><strong>Kuncinya ada di storytelling!</strong> Bukan angka teknis — tapi cerita manusia di balik ekosistem. Ubah data jadi narasi. Itu yang viral. Itu yang menggerakkan.</div>
+          </div>
+        </div>
+        <div class="dialog-bubble">
+          <div class="avatar av-elder">👴</div>
+          <div class="bubble-wrap">
+            <div class="bubble-name">Pak Hamid</div>
+            <div class="bubble elder"><strong>Libatkan kami, masyarakat sini, sebagai narator!</strong> Kalau yang bercerita orang Sebatik sendiri, itu rasanya beda. Lebih nyata, lebih hidup. Saya siap jadi narator untuk konten KKN PPM UGM kalian!</div>
+          </div>
+        </div>
+        <div class="dialog-bubble right">
+          <div class="avatar av-student">🎓</div>
+          <div class="bubble-wrap">
+            <div class="bubble-name">Tim FORSA DIGITAL · KKN PPM UGM</div>
+            <div class="bubble student">Ide brilian, Pak! Kita buat serial konten: <strong>"Suara Pesisir Sebatik"</strong> — dari mulut masyarakat lokal langsung ke layar Indonesia! 🎙️🌊</div>
+          </div>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="card-label" style="color:#3949ab;">📋 Rencana Konten</div>
+        <h3 class="card-title">Output FORSA DIGITAL KKN PPM UGM Taka Sebatik 2026</h3>
+        <div class="fact-row">
+          <div class="fact-chip" style="background:#e8eaf6;border-color:rgba(57,73,171,.2);color:#3949ab;">📷 Foto Ekosistem</div>
+          <div class="fact-chip" style="background:#e8eaf6;border-color:rgba(57,73,171,.2);color:#3949ab;">🎬 Reels/Short Video</div>
+          <div class="fact-chip gold">📊 Infografis Ilmiah</div>
+          <div class="fact-chip">🗺️ Peta Potensi</div>
+          <div class="fact-chip gold">🎙️ Wawancara Tetua</div>
+          <div class="fact-chip" style="background:#e8eaf6;border-color:rgba(57,73,171,.2);color:#3949ab;">📱 Konten Medsos</div>
+          <div class="fact-chip">📖 E-Booklet Digital</div>
+          <div class="fact-chip gold">🖼️ Poster Edukatif</div>
+        </div>
+      </div>
+
+      <div class="cta-block">
+        <div class="big-text">🌊 Bersama KKN PPM UGM Kita Jaga Pesisir Sebatik!</div>
+        <div class="sub-text">FORSA DIGITAL bukan hanya tugas KKN — ia adalah gerakan nyata. Setiap foto yang diambil, setiap cerita yang direkam, setiap infografis yang dibuat oleh Tim KKN PPM UGM Taka Sebatik 2026 adalah batu bata yang membangun kesadaran publik tentang betapa berharganya warisan alam dan budaya Sebatik Barat.</div>
+      </div>
+
+      <div id="back-cover-content">
+        <div style="font-size:48px;margin-bottom:16px;">🌿🌊🎭</div>
+        <div class="bc-title">FORSA DIGITAL</div>
+        <div style="font-size:13px;color:rgba(255,255,255,.5);letter-spacing:2px;text-transform:uppercase;margin-bottom:16px;">Forest Story Digital</div>
+        <p class="bc-sub">Potensi Hutan &amp; Budaya di Pesisir Kecamatan Sebatik Barat — Kalimantan Utara. Didokumentasikan dengan cinta oleh mahasiswa KKN PPM UGM untuk Indonesia.</p>
+
+        <div class="bc-kkn-footer">
+          <div class="bc-kkn-logo">UGM</div>
+          <div class="bc-kkn-info">
+            <div class="bc-kkn-main">KKN PPM Universitas Gadjah Mada</div>
+            <div class="bc-kkn-year">Unit Taka Sebatik · Sebatik Barat · Kalimantan Utara · 2026</div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:20px;">
+          <span style="background:rgba(129,199,132,.2);border:1px solid rgba(129,199,132,.4);color:#a5d6a7;font-size:12px;padding:5px 14px;border-radius:16px;">Ekosistem Mangrove</span>
+          <span style="background:rgba(100,181,246,.2);border:1px solid rgba(100,181,246,.4);color:#90caf9;font-size:12px;padding:5px 14px;border-radius:16px;">Kearifan Lokal</span>
+          <span style="background:rgba(255,204,128,.2);border:1px solid rgba(255,204,128,.4);color:#ffcc80;font-size:12px;padding:5px 14px;border-radius:16px;">Narasi Visual</span>
+          <span style="background:rgba(206,147,216,.2);border:1px solid rgba(206,147,216,.4);color:#ce93d8;font-size:12px;padding:5px 14px;border-radius:16px;">Budaya Pesisir</span>
+        </div>
+        <div style="font-size:11px;color:rgba(255,255,255,.3);letter-spacing:1px;">KKN PPM UGM · Unit Taka Sebatik · Sebatik Barat · 2026</div>
+      </div>
+
+      <div class="source-box">
+        <div class="source-title">📚 Referensi Utama</div>
+        <div class="source-item">Berkes, F. (2012). <em>Sacred Ecology</em> (3rd ed.). Routledge.</div>
+        <div class="source-item">Donato, D.C. et al. (2011). Mangroves among the most carbon-rich forests. <em>Nature Geoscience</em>, 4(5), 293–297.</div>
+        <div class="source-item">Giri, C. et al. (2011). Status and distribution of mangrove forests. <em>Global Ecology and Biogeography</em>, 20(1), 154–159.</div>
+        <div class="source-item">Ginting, L. &amp; Purnomo, H. (2018). Kearifan lokal masyarakat Tidung. <em>Jurnal Ilmu Kehutanan</em>, 12(2), 120–133.</div>
+        <div class="source-item">Kementerian LHK. (2021). <em>Peta Mangrove Nasional Indonesia</em>. Jakarta: KLHK.</div>
+        <div class="source-item">Kusmana, C. (2014). Distribution and current status of mangrove forests in Indonesia. <em>Mangrove Ecosystems of Asia</em>, 37–60. Springer.</div>
+        <div class="source-item">Noor, Y.R. et al. (2006). <em>Panduan Pengenalan Mangrove di Indonesia</em>. Bogor: Wetlands International.</div>
+        <div class="source-item">Wang, C. &amp; Burris, M.A. (1997). Photovoice: Concept, methodology, and use. <em>Health Education &amp; Behavior</em>, 24(3), 369–387.</div>
+        <div class="source-item">BPS Kabupaten Nunukan. (2023). <em>Kecamatan Sebatik Barat dalam Angka 2023</em>. Nunukan: BPS.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const pages=['page-0','page-1','page-2','page-3','page-4','page-5'];
+  const navBtns=document.querySelectorAll('.nav-btn');
+
+  function createStars(){
+    const c=document.getElementById('stars-bg');
+    for(let i=0;i<80;i++){
+      const s=document.createElement('div');
+      s.className='star';
+      const sz=Math.random()*3+1;
+      s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*60}%;left:${Math.random()*100}%;animation-delay:${Math.random()*3}s;animation-duration:${2+Math.random()*3}s;`;
+      c.appendChild(s);
+    }
+  }
+  createStars();
+
+  function openBook(){
+    document.getElementById('cover').style.display='none';
+    document.getElementById('book').style.display='block';
+    goPage(0);
+    window.scrollTo(0,0);
+  }
+
+  function goPage(idx){
+    document.querySelectorAll('.page-section').forEach(p=>p.classList.remove('active'));
+    navBtns.forEach(b=>b.classList.remove('active'));
+    document.getElementById(pages[idx]).classList.add('active');
+    navBtns[idx].classList.add('active');
+    document.getElementById('progress').style.width=((idx+1)/pages.length*100)+'%';
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+</script>

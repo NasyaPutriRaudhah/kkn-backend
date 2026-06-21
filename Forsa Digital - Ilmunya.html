@@ -1,0 +1,686 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;600;700;800&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --forest:#1a6b3c;--forest-light:#2d8a52;--forest-pale:#e8f5ee;
+  --sea:#1565a0;--sea-pale:#e3f2fd;
+  --sand:#c8a35a;--sand-pale:#fdf6e8;--bark:#6d3f1f;
+  --mangrove:#33691e;--cream:#fefaf2;--ink:#1a1a2e;
+  --amber:#854F0B;--amber-pale:#FAEEDA;
+  --teal:#0F6E56;--teal-pale:#E1F5EE;
+}
+body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--ink);overflow-x:hidden;}
+
+.page-nav{position:sticky;top:0;z-index:100;background:rgba(254,250,242,.97);backdrop-filter:blur(8px);border-bottom:2px solid rgba(26,107,60,.12);padding:10px 16px;display:flex;align-items:center;gap:8px;overflow-x:auto;scrollbar-width:none;}
+.page-nav::-webkit-scrollbar{display:none;}
+.nav-btn{flex-shrink:0;font-family:'Nunito',sans-serif;font-size:11px;font-weight:700;padding:6px 14px;border-radius:20px;border:1.5px solid rgba(26,107,60,.2);background:transparent;color:var(--forest);cursor:pointer;transition:all .2s;white-space:nowrap;}
+.nav-btn.active,.nav-btn:hover{background:var(--forest);color:white;border-color:var(--forest);}
+
+.page-section{display:none;}
+.page-section.active{display:block;}
+
+.page-hero{padding:44px 20px 28px;background:linear-gradient(135deg,var(--forest-pale) 0%,white 60%);text-align:center;position:relative;overflow:hidden;}
+.page-hero::before{content:'';position:absolute;top:-50px;right:-50px;width:200px;height:200px;border-radius:50%;background:rgba(26,107,60,.05);}
+.hero-icon{font-size:52px;margin-bottom:10px;display:block;animation:float 3.5s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-9px);}}
+.hero-chapter{font-size:10px;font-weight:800;letter-spacing:3px;color:var(--forest);text-transform:uppercase;margin-bottom:6px;opacity:.7;}
+.hero-title{font-family:'Playfair Display',serif;font-size:clamp(1.4rem,4vw,2.1rem);color:var(--forest);font-weight:700;margin-bottom:10px;line-height:1.2;}
+.hero-desc{font-size:14px;color:#555;max-width:540px;margin:0 auto;line-height:1.7;}
+
+.content-wrap{max-width:700px;margin:0 auto;padding:0 16px 60px;}
+
+.info-card{background:white;border-radius:16px;border:1.5px solid rgba(26,107,60,.12);padding:20px 22px;margin:20px 0;box-shadow:0 2px 14px rgba(26,107,60,.05);transition:transform .2s,box-shadow .2s;}
+.info-card:hover{transform:translateY(-2px);box-shadow:0 6px 22px rgba(26,107,60,.1);}
+.card-label{font-size:10px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.card-label::before{content:'';display:inline-block;width:22px;height:3px;border-radius:2px;}
+.cl-green{color:var(--forest);} .cl-green::before{background:var(--forest);}
+.cl-blue{color:var(--sea);} .cl-blue::before{background:var(--sea);}
+.cl-amber{color:var(--amber);} .cl-amber::before{background:var(--sand);}
+.cl-teal{color:var(--teal);} .cl-teal::before{background:var(--teal);}
+.card-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;margin-bottom:10px;color:var(--ink);}
+.card-body{font-size:14px;line-height:1.8;color:#444;}
+.card-body strong{color:var(--forest);font-weight:700;}
+
+.step-flow{display:flex;flex-direction:column;gap:0;margin:20px 0;}
+.step-item{display:flex;gap:16px;align-items:flex-start;padding:16px 0;border-bottom:1px dashed rgba(26,107,60,.15);}
+.step-item:last-child{border-bottom:none;}
+.step-num{width:40px;height:40px;border-radius:50%;background:var(--forest);color:white;font-size:16px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.step-content{flex:1;}
+.step-title{font-weight:700;font-size:15px;color:var(--forest);margin-bottom:4px;}
+.step-desc{font-size:13.5px;color:#555;line-height:1.7;}
+.step-tag{display:inline-block;background:var(--forest-pale);color:var(--forest);font-size:11px;font-weight:700;padding:3px 10px;border-radius:12px;margin-top:6px;margin-right:4px;}
+.step-tag.amber{background:var(--amber-pale);color:var(--amber);}
+.step-tag.teal{background:var(--teal-pale);color:var(--teal);}
+
+.timeline{margin:20px 0;position:relative;padding-left:28px;}
+.timeline::before{content:'';position:absolute;left:10px;top:0;bottom:0;width:2px;background:rgba(26,107,60,.2);border-radius:2px;}
+.tl-item{position:relative;margin-bottom:20px;padding-bottom:4px;}
+.tl-dot{position:absolute;left:-22px;top:3px;width:14px;height:14px;border-radius:50%;background:var(--forest);border:2.5px solid var(--forest-pale);flex-shrink:0;}
+.tl-dot.amber{background:var(--sand);border-color:var(--amber-pale);}
+.tl-dot.teal{background:var(--teal);border-color:var(--teal-pale);}
+.tl-dot.blue{background:var(--sea);border-color:var(--sea-pale);}
+.tl-period{font-size:11px;font-weight:800;color:var(--forest);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;}
+.tl-period.amber{color:var(--amber);}
+.tl-period.teal{color:var(--teal);}
+.tl-period.blue{color:var(--sea);}
+.tl-title{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px;}
+.tl-body{font-size:13px;color:#555;line-height:1.65;}
+
+.monev-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:16px 0;}
+.monev-card{background:white;border-radius:14px;border:1.5px solid rgba(26,107,60,.13);padding:14px;text-align:center;}
+.monev-icon{font-size:28px;margin-bottom:6px;display:block;}
+.monev-val{font-size:22px;font-weight:800;color:var(--forest);margin-bottom:2px;}
+.monev-val.amber{color:var(--amber);}
+.monev-val.teal{color:var(--teal);}
+.monev-val.blue{color:var(--sea);}
+.monev-label{font-size:11.5px;color:#666;line-height:1.4;}
+
+.alert-box{border-radius:12px;padding:14px 18px;margin:16px 0;display:flex;gap:12px;align-items:flex-start;}
+.alert-box.warning{background:var(--amber-pale);border:1.5px solid rgba(200,163,90,.35);}
+.alert-box.info{background:var(--teal-pale);border:1.5px solid rgba(15,110,86,.2);}
+.alert-box.success{background:var(--forest-pale);border:1.5px solid rgba(26,107,60,.2);}
+.alert-icon{font-size:20px;flex-shrink:0;margin-top:1px;}
+.alert-text{font-size:13.5px;line-height:1.65;}
+.alert-text strong{font-weight:700;}
+.alert-box.warning .alert-text{color:var(--bark);}
+.alert-box.info .alert-text{color:var(--teal);}
+.alert-box.success .alert-text{color:var(--forest);}
+
+.quote-block{border-left:4px solid var(--forest);background:var(--forest-pale);padding:15px 20px;border-radius:0 12px 12px 0;margin:20px 0;}
+.quote-text{font-family:'Playfair Display',serif;font-size:15px;font-style:italic;color:var(--forest);line-height:1.7;}
+.quote-source{font-size:12px;color:#777;margin-top:7px;font-weight:600;}
+
+.dialog-scene{background:linear-gradient(135deg,#f0f7f4,#e8f4fd);border-radius:20px;padding:22px 18px;margin:22px 0;border:1.5px dashed rgba(26,107,60,.2);}
+.dialog-title{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--forest);margin-bottom:16px;text-align:center;opacity:.7;}
+.dialog-bubble{display:flex;gap:12px;margin-bottom:14px;align-items:flex-start;}
+.dialog-bubble.right{flex-direction:row-reverse;}
+.avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;border:2px solid white;box-shadow:0 2px 8px rgba(0,0,0,.1);}
+.av-ranger{background:linear-gradient(135deg,#2d8a52,#1a6b3c);}
+.av-student{background:linear-gradient(135deg,#1565a0,#1e88e5);}
+.av-elder{background:linear-gradient(135deg,#c8a35a,#8d6e3a);}
+.bubble-wrap{display:flex;flex-direction:column;max-width:80%;}
+.dialog-bubble.right .bubble-wrap{align-items:flex-end;}
+.bubble-name{font-size:11px;font-weight:700;color:#666;margin-bottom:3px;}
+.bubble{padding:11px 15px;border-radius:15px;font-size:13.5px;line-height:1.65;}
+.bubble.ranger{background:var(--forest);color:white;border-bottom-left-radius:4px;}
+.bubble.student{background:var(--sea);color:white;border-bottom-right-radius:4px;}
+.bubble.elder{background:#fff8e1;color:#5d4037;border:1.5px solid rgba(200,163,90,.35);border-bottom-left-radius:4px;}
+
+.fact-row{display:flex;flex-wrap:wrap;gap:9px;margin:14px 0;}
+.fact-chip{background:var(--forest-pale);border:1.5px solid rgba(26,107,60,.2);color:var(--forest);font-size:12.5px;font-weight:700;padding:6px 13px;border-radius:20px;display:flex;align-items:center;gap:5px;}
+.fact-chip.blue{background:var(--sea-pale);border-color:rgba(21,101,160,.2);color:var(--sea);}
+.fact-chip.amber{background:var(--amber-pale);border-color:rgba(200,163,90,.3);color:var(--amber);}
+.fact-chip.teal{background:var(--teal-pale);border-color:rgba(15,110,86,.2);color:var(--teal);}
+
+.cta-block{background:linear-gradient(135deg,var(--forest),#0f4620);border-radius:20px;padding:26px 22px;text-align:center;margin:28px 0;color:white;}
+.cta-block .big-text{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;margin-bottom:10px;line-height:1.3;}
+.cta-block .sub-text{font-size:13px;opacity:.82;line-height:1.7;}
+
+.source-box{background:#f9f9f9;border-radius:12px;border:1.5px solid #e0e0e0;padding:14px 18px;margin:24px 0;}
+.source-title{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:10px;}
+.source-item{font-size:12px;color:#666;line-height:1.7;padding:3px 0;border-bottom:1px dashed #eee;}
+.source-item:last-child{border-bottom:none;}
+
+.progress-bar{height:3px;background:rgba(26,107,60,.1);}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--forest),#4caf50);transition:width .4s ease;}
+</style>
+
+<div class="progress-bar"><div class="progress-fill" id="progress" style="width:25%"></div></div>
+
+<nav class="page-nav">
+  <button class="nav-btn active" onclick="goPage(0)">🌱 Penanaman</button>
+  <button class="nav-btn" onclick="goPage(1)">🪴 Pemeliharaan</button>
+  <button class="nav-btn" onclick="goPage(2)">📊 Monitoring</button>
+  <button class="nav-btn" onclick="goPage(3)">✅ Evaluasi</button>
+</nav>
+
+<div class="page-section active" id="p0">
+  <div class="page-hero">
+    <span class="hero-icon">🌱</span>
+    <div class="hero-chapter">Bab VI · Teknik Lapangan</div>
+    <h2 class="hero-title">Cara Penanaman Mangrove</h2>
+    <p class="hero-desc">Menanam mangrove bukan sekadar menancapkan bibit ke lumpur — ada ilmu dan urutan yang harus dipahami agar pohon tumbuh kuat dan memberi manfaat jangka panjang.</p>
+  </div>
+  <div class="content-wrap">
+
+    <div class="info-card">
+      <div class="card-label cl-green">Persiapan Awal</div>
+      <h3 class="card-title">Kenali Lokasi Sebelum Menanam</h3>
+      <p class="card-body">Keberhasilan penanaman mangrove sangat ditentukan oleh kesesuaian lokasi. Sebelum memulai, Tim KKN PPM UGM Taka Sebatik 2026 perlu melakukan <strong>survei awal</strong> untuk menilai: substrat (lumpur, pasir berlumpur, atau berpasir), kisaran pasang-surut, salinitas air, serta ancaman yang ada seperti gelombang besar atau aktivitas manusia. Jangan pernah menanam di lokasi yang tidak sesuai karena tingkat kematian bibit akan sangat tinggi.</p>
+      <br>
+      <div class="fact-row">
+        <div class="fact-chip">🌊 Zona Pasang Surut</div>
+        <div class="fact-chip blue">🧪 Salinitas 10–30 ppt</div>
+        <div class="fact-chip amber">🌡️ Suhu 20–35°C</div>
+        <div class="fact-chip">🪸 Substrat Berlumpur</div>
+        <div class="fact-chip teal">📍 Jauh dari Ombak Besar</div>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <div class="card-label cl-green">Pemilihan Bibit</div>
+      <h3 class="card-title">Memilih Bibit yang Tepat</h3>
+      <p class="card-body">Gunakan <strong>propagul</strong> (buah yang sudah tua dan siap berkecambah) atau bibit dari persemaian yang berumur minimal 3–6 bulan. Untuk lokasi Sebatik Barat, spesies yang paling direkomendasikan adalah <em>Rhizophora apiculata</em> dan <em>R. mucronata</em> karena toleransi tinggi terhadap kondisi pasang-surut setempat. Bibit yang baik memiliki batang tegak, daun hijau segar, tidak berlubang atau layu, dan perakaran kompak.</p>
+    </div>
+
+    <div class="step-flow">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-title">Survei dan pemetaan lokasi tanam</div>
+          <div class="step-desc">Tandai area tanam berdasarkan hasil survei substrat dan pasang-surut. Pilih zona intertidal yang tergenang 2–4 jam per hari. Buat sketsa peta sederhana dengan titik koordinat GPS untuk dokumentasi FORSA DIGITAL.</div>
+          <span class="step-tag">Persiapan</span>
+          <span class="step-tag amber">1–2 hari sebelum tanam</span>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-title">Siapkan alat dan bahan</div>
+          <div class="step-desc">Ajir bambu/kayu (tinggi 60–80 cm) untuk penyangga, tali rafia, bibit propagul atau bibit polybag, tugal (kayu runcing untuk melubangi substrat), sarung tangan, dan sepatu boot. Untuk skala besar, siapkan tali grid untuk memastikan jarak tanam seragam.</div>
+          <span class="step-tag">Peralatan</span>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-title">Tentukan jarak dan pola tanam</div>
+          <div class="step-desc">Jarak tanam standar adalah <strong>1 × 1 m</strong> untuk pemulihan cepat atau <strong>2 × 2 m</strong> untuk pertumbuhan optimal jangka panjang. Gunakan pola bujur sangkar atau segitiga sama sisi. Tandai setiap titik tanam dengan ajir sementara sebelum mulai menanam.</div>
+          <span class="step-tag">Teknis</span>
+          <span class="step-tag teal">Jarak 1×1 m atau 2×2 m</span>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <div class="step-title">Proses penanaman</div>
+          <div class="step-desc">Waktu terbaik menanam adalah <strong>saat air surut</strong>. Buat lubang dengan tugal sedalam 20–30 cm. Masukkan propagul dengan posisi tegak, ujung runcing ke bawah, tanam sedalam 1/3 panjang propagul. Untuk bibit polybag, sobek polybag hati-hati, masukkan akar dan media tanamnya bersama, lalu padatkan substrat di sekitar bibit.</div>
+          <span class="step-tag amber">Lakukan saat air surut</span>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <div class="step-title">Pasang ajir dan ikatan</div>
+          <div class="step-desc">Tancapkan ajir bambu di sisi bibit, ikat batang bibit ke ajir menggunakan tali rafia dengan simpul longgar (bukan simpul mati) agar tidak melukai batang. Satu bibit cukup satu ajir. Ajir berfungsi sebagai penyangga terhadap arus dan gelombang kecil selama fase akar belum kuat.</div>
+          <span class="step-tag teal">Wajib untuk semua bibit</span>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">6</div>
+        <div class="step-content">
+          <div class="step-title">Dokumentasi dan pencatatan</div>
+          <div class="step-desc">Catat jumlah bibit tanam, koordinat GPS, tanggal, spesies, dan kondisi cuaca. Foto setiap titik tanam untuk rekam jejak FORSA DIGITAL. Data ini menjadi dasar pemantauan pertumbuhan di kemudian hari.</div>
+          <span class="step-tag">FORSA DIGITAL</span>
+          <span class="step-tag amber">Wajib tercatat</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="alert-box warning">
+      <div class="alert-icon">⚠️</div>
+      <div class="alert-text"><strong>Perhatian:</strong> Hindari menanam pada musim angin kencang atau saat tinggi gelombang >0,5 m. Bibit yang baru ditanam sangat rentan terhadap gangguan fisik dalam 2–4 minggu pertama (fase kritis). Idealnya pilih musim tenang (April–Oktober di perairan Kalimantan Utara).</div>
+    </div>
+
+    <div class="dialog-scene">
+      <div class="dialog-title">💬 Praktik Penanaman di Lapangan</div>
+      <div class="dialog-bubble">
+        <div class="avatar av-student">🎓</div>
+        <div class="bubble-wrap">
+          <div class="bubble-name">Mahasiswa KKN PPM UGM</div>
+          <div class="bubble student">Kak, propagul ini langsung ditancap ke lumpur begitu saja? Tidak perlu direndam dulu?</div>
+        </div>
+      </div>
+      <div class="dialog-bubble right">
+        <div class="avatar av-ranger">🌲</div>
+        <div class="bubble-wrap">
+          <div class="bubble-name">Penyuluh Kehutanan</div>
+          <div class="bubble ranger">Propagul <em>Rhizophora</em> memang langsung tanam — tidak perlu perendaman karena ia sudah berkecambah di pohon induknya. <strong>Yang penting: tanam tegak, jangan miring!</strong> Kemiringan >15° akan menghambat pembentukan akar tunjang dan meningkatkan risiko bibit tumbang terkena arus.</div>
+        </div>
+      </div>
+      <div class="dialog-bubble">
+        <div class="avatar av-elder">👴</div>
+        <div class="bubble-wrap">
+          <div class="bubble-name">Pak Hamid, Nelayan Senior</div>
+          <div class="bubble elder">Kami dari dulu menanam bakau pas air habis surut — biar bisa lihat betul kondisi tanahnya. Nenek moyang bilang: <em>"tanam di lumpur basah, bukan lumpur kering"</em>. Kalau kering terlalu lama, akar tidak mau tumbuh.</div>
+        </div>
+      </div>
+      <div class="dialog-bubble right">
+        <div class="avatar av-student">🎓</div>
+        <div class="bubble-wrap">
+          <div class="bubble-name">Mahasiswa KKN PPM UGM</div>
+          <div class="bubble student">Jadi kearifan lokal Pak Hamid itu sejalan dengan SOP teknis — menanam di lumpur basah saat surut! Ini yang akan kita dokumentasikan di FORSA DIGITAL sebagai bukti sains dan tradisi berjalan bersama. 🌱</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quote-block">
+      <p class="quote-text">"Penanaman mangrove yang berhasil dimulai jauh sebelum bibit menyentuh tanah — ia dimulai dari pemilihan lokasi yang tepat, bibit yang sehat, dan tangan yang paham apa yang mereka tanam."</p>
+      <p class="quote-source">— Diadaptasi dari Alongi, D.M. (2002). Present state and future of the world's mangrove forests. <em>Environmental Conservation</em>, 29(3), 331–349.</p>
+    </div>
+
+    <div class="source-box">
+      <div class="source-title">📚 Referensi Penanaman</div>
+      <div class="source-item">Alongi, D.M. (2002). Present state and future of the world's mangrove forests. <em>Environmental Conservation</em>, 29(3), 331–349.</div>
+      <div class="source-item">Elster, C. (2000). Reasons for reforestation success and failure with three mangrove species in Colombia. <em>Forest Ecology and Management</em>, 131(1–3), 201–214.</div>
+      <div class="source-item">Noor, Y.R., Khazali, M. &amp; Suryadiputra, I.N.N. (2006). <em>Panduan Pengenalan Mangrove di Indonesia</em>. Bogor: Wetlands International.</div>
+      <div class="source-item">BPDAS-HL Mahakam Berau. (2020). <em>Pedoman Teknis Rehabilitasi Mangrove di Kalimantan</em>. Samarinda: KLHK.</div>
+    </div>
+  </div>
+</div>
+
+<div class="page-section" id="p1">
+  <div class="page-hero" style="background:linear-gradient(135deg,var(--amber-pale) 0%,white 60%);">
+    <span class="hero-icon">🪴</span>
+    <div class="hero-chapter">Bab VI · Lanjutan</div>
+    <h2 class="hero-title" style="color:var(--amber);">Pemeliharaan Mangrove</h2>
+    <p class="hero-desc">Menanam adalah awal — memelihara adalah tanggung jawab. Tanpa pemeliharaan yang konsisten, investasi penanaman bisa sia-sia dalam hitungan minggu.</p>
+  </div>
+  <div class="content-wrap">
+
+    <div class="info-card">
+      <div class="card-label cl-amber">Prinsip Dasar</div>
+      <h3 class="card-title">Mengapa Pemeliharaan Sangat Kritis?</h3>
+      <p class="card-body">Fase 0–6 bulan pertama adalah masa paling kritis dalam siklus hidup bibit mangrove yang baru ditanam. Pada fase ini, akar belum cukup kuat untuk menopang batang dari gangguan arus, dan bibit belum mampu bersaing dengan gulma. Tanpa pemeliharaan rutin, tingkat kematian bibit bisa mencapai <strong>60–80%</strong> — sebuah kerugian besar yang mudah dicegah dengan intervensi yang tepat waktu.</p>
+    </div>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-period">Minggu 1–2 setelah tanam</div>
+        <div class="tl-title">Pemeriksaan harian kondisi bibit</div>
+        <div class="tl-body">Periksa setiap bibit: apakah masih tegak, ajir masih kokoh, dan tidak ada bibit yang terbawa arus atau hanyut. Tegakkan kembali bibit yang miring. Catat jumlah bibit yang mati atau hilang untuk data awal FORSA DIGITAL.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot amber"></div>
+        <div class="tl-period amber">Bulan 1–3</div>
+        <div class="tl-title">Penyulaman (replanting) bibit mati</div>
+        <div class="tl-body">Ganti segera bibit yang mati dengan bibit baru dari stok cadangan. Lakukan penyulaman maksimal 2 minggu setelah bibit dinyatakan mati agar tidak terlambat memanfaatkan musim tanam. Target: tingkat hidup (survival rate) minimal 70% pada akhir bulan ke-3.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot teal"></div>
+        <div class="tl-period teal">Bulan 1–6</div>
+        <div class="tl-title">Pengendalian gulma dan sampah</div>
+        <div class="tl-body">Bersihkan gulma (terutama alga dan tumbuhan merambat) yang menutupi bibit. Angkat sampah plastik dan debris yang tersangkut di batang bibit karena dapat menghambat pertumbuhan dan menarik hama. Lakukan setiap 2 minggu sekali di bulan pertama, kemudian bulanan.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot blue"></div>
+        <div class="tl-period blue">Bulan 3–12</div>
+        <div class="tl-title">Pemantauan pertumbuhan dan penguatan ajir</div>
+        <div class="tl-body">Ukur tinggi bibit dan hitung jumlah daun setiap bulan. Perkuat atau ganti ajir yang patah/lapuk. Mulai longgarkan ikatan tali yang sudah terlalu ketat seiring bertambahnya diameter batang. Pada bibit yang sudah memiliki akar tunjang kuat, ajir bisa dilepas.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-period">Bulan 6–24</div>
+        <div class="tl-title">Pemeliharaan intensif berkurang, pengawasan tetap</div>
+        <div class="tl-body">Bibit yang telah melewati 6 bulan dengan baik mulai memasuki fase mandiri. Frekuensi pemeliharaan dikurangi menjadi bulanan. Fokus beralih ke pemantauan pertumbuhan, pemantauan ancaman (penebangan liar, sampah masif), dan dokumentasi perkembangan ekosistem.</div>
+      </div>
+    </div>
+
+    <div class="alert-box info">
+      <div class="alert-icon">💡</div>
+      <div class="alert-text"><strong>Tips Pemeliharaan Berbasis Kearifan Lokal:</strong> Libatkan masyarakat nelayan setempat sebagai "penjaga bibit" dengan sistem bagi hasil atau insentif sederhana. Masyarakat yang merasa memiliki area tanam akan jauh lebih konsisten dalam pemeliharaan dibanding relawan eksternal yang hanya datang sesekali. (Berkes, 2012)</div>
+    </div>
+
+    <div class="info-card">
+      <div class="card-label cl-amber">Masalah Umum &amp; Solusi</div>
+      <h3 class="card-title">Gangguan yang Sering Ditemui</h3>
+      <div class="step-flow" style="margin:12px 0;">
+        <div class="step-item" style="padding:12px 0;">
+          <div class="step-num" style="background:#c8a35a;font-size:18px;">🦀</div>
+          <div class="step-content">
+            <div class="step-title">Serangan kepiting dan hewan penggali</div>
+            <div class="step-desc">Kepiting Scylla spp. dan hewan penggali dapat merusak akar bibit muda. Solusi: pasang pelindung batang dari potongan botol plastik atau bambu belah di sekitar pangkal bibit selama 2 bulan pertama.</div>
+          </div>
+        </div>
+        <div class="step-item" style="padding:12px 0;">
+          <div class="step-num" style="background:#c8a35a;font-size:18px;">🌊</div>
+          <div class="step-content">
+            <div class="step-title">Bibit tumbang akibat arus deras</div>
+            <div class="step-desc">Perkuat dengan ajir ganda (X-frame) untuk lokasi berarus kencang. Pertimbangkan pembuatan pemecah gelombang sederhana dari bambu sebelum musim angin kencang tiba.</div>
+          </div>
+        </div>
+        <div class="step-item" style="padding:12px 0;">
+          <div class="step-num" style="background:#c8a35a;font-size:18px;">🗑️</div>
+          <div class="step-content">
+            <div class="step-title">Akumulasi sampah plastik</div>
+            <div class="step-desc">Sampah yang tersangkut di akar dan batang adalah ancaman nyata di pesisir Sebatik. Jadwalkan sesi bersih sampah komunal setiap 2 minggu bersama masyarakat lokal, dan dokumentasikan sebagai konten FORSA DIGITAL.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dialog-scene">
+      <div class="dialog-title">💬 Belajar Memelihara dari Pengalaman</div>
+      <div class="dialog-bubble">
+        <div class="avatar av-student">🎓</div>
+        <div class="bubble-wrap">
+          <div class="bubble-name">Mahasiswa KKN PPM UGM</div>
+          <div class="bubble student">Kak, ada bibit yang sudah mati padahal baru 2 minggu ditanam. Kira-kira kenapa ya?</div>
+        </div>
+      </div>
+      <div class="dialog-bubble right">
+        <div class="avatar av-ranger">🌲</div>
+        <div class="bubble-wrap">
+          <div class="bubble-name">Penyuluh Kehutanan</div>
+          <div class="bubble ranger">Bisa banyak penyebab — <strong>cek dulu apakah akar sudah terbentuk atau belum.</strong> Kalau bibit masih bisa dicabut mudah tanpa hambatan, berarti akar belum tumbuh dan mungkin kondisi substrat terlalu kering atau terlalu banyak tergenang. Catat kondisinya untuk data evaluasi!</div>
+        </div>
+      </div>
+      <div class="dialog-bubble">
+        <div class="avatar av-elder">👴</div>
+        <div class="bubble-wrap">
+          <div class="bubble-name">Pak Hamid</div>
+          <div class="bubble elder">Kalau pengalaman saya — biasanya bibit yang mati paling cepat itu yang posisinya paling terekspos ombak. Nenek moyang kami dulu selalu <em>"tanam di balik batu atau akar yang sudah ada"</em> biar ada pelindung alami untuk bibit kecil.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="source-box">
+      <div class="source-title">📚 Referensi Pemeliharaan</div>
+      <div class="source-item">Field, C.D. (1999). Rehabilitation of mangrove ecosystems: an overview. <em>Marine Pollution Bulletin</em>, 37(8–12), 383–392.</div>
+      <div class="source-item">Kamali, B. &amp; Hashim, R. (2011). Mangrove restoration without planting. <em>Ecological Engineering</em>, 37(2), 387–391.</div>
+      <div class="source-item">Primavera, J.H. &amp; Esteban, J.M.A. (2008). A review of mangrove rehabilitation in the Philippines. <em>Hydrobiologia</em>, 637(1), 45–59.</div>
+    </div>
+  </div>
+</div>
+
+<div class="page-section" id="p2">
+  <div class="page-hero" style="background:linear-gradient(135deg,var(--teal-pale) 0%,white 60%);">
+    <span class="hero-icon">📊</span>
+    <div class="hero-chapter">Bab VII</div>
+    <h2 class="hero-title" style="color:var(--teal);">Monitoring (Pemantauan)</h2>
+    <p class="hero-desc">Data adalah nyawa dari setiap program konservasi. Tanpa pemantauan yang terstruktur, kita tidak bisa tahu apakah mangrove yang kita tanam benar-benar tumbuh dan berfungsi.</p>
+  </div>
+  <div class="content-wrap">
+
+    <div class="info-card">
+      <div class="card-label cl-teal">Konsep Dasar</div>
+      <h3 class="card-title">Apa yang Dimaksud Monitoring?</h3>
+      <p class="card-body">Monitoring atau pemantauan adalah proses <strong>pengumpulan data secara sistematis dan berkala</strong> untuk mengetahui kondisi dan perkembangan area penanaman mangrove dari waktu ke waktu. Monitoring yang baik bukan hanya mencatat apakah bibit hidup atau mati — ia merekam pertumbuhan, tutupan, kualitas lingkungan, serta respons ekosistem terhadap penanaman. Di FORSA DIGITAL, hasil monitoring juga menjadi konten ilmiah yang bisa disajikan kepada publik secara menarik.</p>
+    </div>
+
+    <div class="monev-grid">
+      <div class="monev-card">
+        <span class="monev-icon">📐</span>
+        <div class="monev-val">2×</div>
+        <div class="monev-label">Pengukuran per bulan (2 bulan pertama)</div>
+      </div>
+      <div class="monev-card">
+        <span class="monev-icon">🌱</span>
+        <div class="monev-val teal">≥70%</div>
+        <div class="monev-label">Target survival rate bulan ke-3</div>
+      </div>
+      <div class="monev-card">
+        <span class="monev-icon">📏</span>
+        <div class="monev-val amber">≥30 cm</div>
+        <div class="monev-label">Target tinggi bibit akhir bulan ke-6</div>
+      </div>
+      <div class="monev-card">
+        <span class="monev-icon">📸</span>
+        <div class="monev-val">1×</div>
+        <div class="monev-label">Foto dokumentasi per titik per bulan</div>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <div class="card-label cl-teal">Parameter Monitoring</div>
+      <h3 class="card-title">Apa Saja yang Diukur?</h3>
+      <div class="step-flow" style="margin:12px 0;">
+        <div class="step-item" style="padding:12px 0;">
+          <div class="step-num" style="background:var(--teal);">A</div>
+          <div class="step-content">
+            <div class="step-title">Parameter biofisik bibit</div>
+            <div class="step-desc">Tinggi bibit (cm) diukur dari pangkal batang ke ujung tunas tertinggi. Jumlah daun dan kondisi daun (sehat/kuning/gugur). Diameter batang (mm) diukur dengan jangka sorong di ketinggian 5 cm dari pangkal. Jumlah akar tunjang yang terbentuk.</div>
+            <span class="step-tag teal">Ukur setiap bulan</span>
+          </div>
+        </div>
+        <div class="step-item" style="padding:12px 0;">
+          <div class="step-num" style="background:var(--teal);">B</div>
+          <div class="step-content">
+            <div class="step-title">Tingkat keberhasilan hidup (survival rate)</div>
+            <div class="step-desc">Hitung jumlah bibit yang masih hidup dibagi total bibit yang ditanam, dikalikan 100%. Catat penyebab kematian jika diketahui (arus, hama, kekeringan, dll). SR = (Jumlah bibit hidup ÷ Jumlah bibit tanam) × 100%.</div>
+            <span class="step-tag teal">Formula kunci</span>
+          </div>
+        </div>
+        <div class="step-item" style="padding:12px 0;">
+          <div class="step-num" style="background:var(--teal);">C</div>
+          <div class="step-content">
+            <div class="step-title">Parameter kualitas lingkungan</div>
+            <div class="step-desc">Salinitas air (ppt) menggunakan refraktometer. Suhu air (°C). pH substrat. Tinggi muka air saat pasang dan surut (cm). Data ini diperlukan untuk menganalisis korelasi antara kondisi lingkungan dan keberhasilan tumbuh bibit.</div>
+            <span class="step-tag amber">Per 2 bulan sekali</span>
+          </div>
+        </div>
+        <div class="step-item" style="padding:12px 0;">
+          <div class="step-num" style="background:var(--teal);">D</div>
+          <div class="step-content">
+            <div class="step-title">Dokumentasi visual (foto &amp; video)</div>
+            <div class="step-desc">Foto dari titik tetap (fixed point photography) setiap bulan untuk merekam perubahan tutupan kanopi secara visual. Video time-lapse jika memungkinkan. Semua foto disimpan dengan metadata GPS dan tanggal untuk arsip FORSA DIGITAL.</div>
+            <span class="step-tag">FORSA DIGITAL</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <div class="card-label cl-teal">Metode Monitoring</div>
+      <h3 class="card-title">Teknik Pemantauan di Lapangan</h3>
+      <p class="card-body">Gunakan metode <strong>petak contoh permanen (permanent sample plot / PSP)</strong> — buat plot berukuran 10×10 m atau 5×5 m yang permanen dan semua bibit di dalamnya diukur setiap periode monitoring. Tandai setiap bibit dengan label nomor tahan air (misalnya label aluminium atau cat tahan air). Catat data di formulir lapangan yang sudah disiapkan dan masukkan ke spreadsheet segera setelah kembali dari lapangan untuk menghindari kehilangan data.</p>
+      <br>
+      <div class="fact-row">
+        <div class="fact-chip teal">📋 Form Data Lapangan</div>
+        <div class="fact-chip teal">📍 Label Bibit Permanen</div>
+        <div class="fact-chip">📊 Spreadsheet Digital</div>
+        <div class="fact-chip amber">🗺️ GPS Koordinat Tetap</div>
+        <div class="fact-chip teal">📸 Fixed Point Photo</div>
+      </div>
+    </div>
+
+    <div class="alert-box success">
+      <div class="alert-icon">✅</div>
+      <div class="alert-text"><strong>Integrasi dengan FORSA DIGITAL:</strong> Data monitoring dapat disajikan sebagai <em>infografis berkala</em> (misalnya "Update Pertumbuhan Mangrove Sebatik — Bulan ke-3") yang disebarkan melalui media sosial. Ini mengubah data ilmiah menjadi konten edukatif yang menarik dan membangun akuntabilitas publik terhadap program KKN PPM UGM Taka Sebatik 2026.</div>
+    </div>
+
+    <div class="dialog-scene">
+      <div class="dialog-title">💬 Diskusi Teknik Monitoring</div>
+      <div class="dialog-bubble">
+        <div class="avatar av-student">🎓</div>
+        <div class="bubble-wrap">
+          <div class="bubble-name">Mahasiswa KKN PPM UGM</div>
+          <div class="bubble student">Kak, kalau kita hanya 40 hari KKN, bagaimana kita bisa monitoring jangka panjang? Kan kita nanti sudah pulang ke Jogja...</div>
+        </div>
+      </div>
+      <div class="dialog-bubble right">
+        <div class="avatar av-ranger">🌲</div>
+        <div class="bubble-wrap">
+          <div class="bubble-name">Penyuluh Kehutanan</div>
+          <div class="bubble ranger"><strong>Solusinya: latih warga lokal sebagai enumerator!</strong> Buat SOP monitoring sederhana dengan formulir yang mudah dipahami. Minta 2–3 warga terpilih untuk melanjutkan monitoring. Data mereka dikirim via WhatsApp ke tim Jogja. Ini juga model pemberdayaan masyarakat yang luar biasa!</div>
+        </div>
+      </div>
+      <div class="dialog-bubble">
+        <div class="avatar av-elder">👴</div>
+        <div class="bubble-wrap">
+          <div class="bubble-name">Kakek Daud</div>
+          <div class="bubble elder">Saya dan beberapa pemuda kampung bersedia! Kalau ada pelatihan singkat, kami pasti bisa. Kami yang tinggal di sini justru lebih tahu kapan kondisi laut berubah, kapan musim ombak besar, dan perubahan apa yang terjadi setiap hari.</div>
+        </div>
+      </div>
+      <div class="dialog-bubble right">
+        <div class="avatar av-student">🎓</div>
+        <div class="bubble-wrap">
+          <div class="bubble-name">Mahasiswa KKN PPM UGM</div>
+          <div class="bubble student">Sempurna! Kita buat modul pelatihan enumerator sederhana sebagai output tambahan FORSA DIGITAL. Masyarakat Sebatik bukan hanya objek penelitian — mereka mitra ilmiah kita! 🤝</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="source-box">
+      <div class="source-title">📚 Referensi Monitoring</div>
+      <div class="source-item">Kauffman, J.B. &amp; Donato, D.C. (2012). <em>Protocols for the measurement, monitoring and reporting of structure, biomass and carbon stocks in mangrove forests</em>. Bogor: CIFOR.</div>
+      <div class="source-item">Mukherjee, N. et al. (2014). The importance of monitoring for biodiversity conservation. <em>PLoS ONE</em>, 9(2), e89498.</div>
+      <div class="source-item">Bosire, J.O. et al. (2008). Functionality of restored mangroves. <em>Aquatic Botany</em>, 89(2), 251–259.</div>
+    </div>
+  </div>
+</div>
+
+<div class="page-section" id="p3">
+  <div class="page-hero" style="background:linear-gradient(135deg,var(--sea-pale) 0%,white 60%);">
+    <span class="hero-icon">✅</span>
+    <div class="hero-chapter">Bab VIII</div>
+    <h2 class="hero-title" style="color:var(--sea);">Evaluasi Program</h2>
+    <p class="hero-desc">Evaluasi adalah cermin kejujuran program — ia menunjukkan apa yang berhasil, apa yang gagal, dan ke mana kita harus melangkah selanjutnya.</p>
+  </div>
+  <div class="content-wrap">
+
+    <div class="info-card">
+      <div class="card-label cl-blue">Konsep Evaluasi</div>
+      <h3 class="card-title">Evaluasi vs. Monitoring: Apa Bedanya?</h3>
+      <p class="card-body">Monitoring adalah proses <em>mengumpulkan data</em> secara berkelanjutan, sedangkan evaluasi adalah proses <em>menganalisis dan menilai</em> data tersebut untuk membuat keputusan. Evaluasi dilakukan pada titik-titik waktu tertentu (biasanya akhir bulan ke-3, ke-6, dan ke-12) untuk menilai apakah program berjalan sesuai target, mengidentifikasi hambatan, dan merumuskan perbaikan. Dalam konteks KKN PPM UGM Taka Sebatik 2026, evaluasi juga menjadi bahan laporan akhir yang bermakna secara akademik.</p>
+    </div>
+
+    <div class="info-card">
+      <div class="card-label cl-blue">Kerangka Evaluasi</div>
+      <h3 class="card-title">Indikator Keberhasilan Program FORSA DIGITAL</h3>
+      <div class="step-flow" style="margin:12px 0;">
+        <div class="step-item" style="padding:12px 0;">
+          <div class="step-num" style="background:var(--sea);">1</div>
+          <div class="step-content">
+            <div class="step-title">Indikator ekologis</div>
+            <div class="step-desc">Survival rate bibit ≥70% pada bulan ke-3 dan ≥60% pada bulan ke-12. Pertambahan tinggi rata-rata ≥5 cm/bulan. Terbentuknya akar tunjang pada ≥50% bibit hidup di bulan ke-6. Mulai terlihatnya fauna asosiasi (kepiting, ikan kecil, burung) di area tanam pada bulan ke-6–12.</div>
+            <span class="step-tag" style="background:var(--sea-pale);color:var(--sea);border-color:rgba(21,101,160,.2);">Ekologis</span>
+          </div>
+        </div>
+        <div class="step-item" style="padding:12px 0;">
+          <div class="step-num" style="background:var(--sea);">2</div>
+          <div class="step-content">
+            <div class="step-title">Indikator sosial dan partisipasi</div>
+            <div class="step-desc">Jumlah masyarakat yang terlibat aktif dalam penanaman dan pemeliharaan. Terbentuknya kelompok enumerator lokal minimal 3 orang. Tingkat pengetahuan masyarakat tentang manfaat mangrove sebelum dan sesudah program (diukur dengan kuesioner pre-post).</div>
+            <span class="step-tag" style="background:var(--sea-pale);color:var(--sea);border-color:rgba(21,101,160,.2);">Sosial</span>
+          </div>
+        </div>
+        <div class="step-item" style="padding:12px 0;">
+          <div class="step-num" style="background:var(--sea);">3</div>
+          <div class="step-content">
+            <div class="step-title">Indikator dokumentasi FORSA DIGITAL</div>
+            <div class="step-desc">Jumlah dan kualitas konten yang diproduksi (foto, video, infografis, poster). Jangkauan penyebaran di media sosial (reach dan engagement). Tersusunnya buku saku digital ini sebagai produk dokumentasi. Terdokumentasikannya minimal 5 kearifan lokal yang berkaitan dengan mangrove dan pesisir.</div>
+            <span class="step-tag">FORSA DIGITAL</span>
+          </div>
+        </div>
+        <div class="step-item" style="padding:12px 0;">
+          <div class="step-num" style="background:var(--sea);">4</div>
+          <div class="step-content">
+            <div class="step-title">Indikator keberlanjutan</div>
+            <div class="step-desc">Adanya rencana pemeliharaan jangka panjang yang disepakati bersama masyarakat (minimal 1 tahun ke depan). Adanya komitmen pemerintah desa atau instansi terkait untuk melanjutkan program. Tersedianya data baseline yang bisa digunakan oleh tim KKN berikutnya.</div>
+            <span class="step-tag amber">Keberlanjutan</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <div class="card-label cl-blue">Metode Evaluasi</div>
+      <h3 class="card-title">Cara Melaksanakan Evaluasi yang Bermakna</h3>
+      <p class="card-body">Evaluasi yang baik menggunakan pendekatan <strong>partisipatif</strong> — melibatkan masyarakat sebagai penilai, bukan hanya objek penilaian. Beberapa metode yang dapat diterapkan:</p>
+      <br>
+      <div class="fact-row">
+        <div class="fact-chip blue">📋 Pre-post kuesioner</div>
+        <div class="fact-chip blue">👥 FGD (Focus Group Discussion)</div>
+        <div class="fact-chip">📈 Analisis data time-series</div>
+        <div class="fact-chip amber">🗣️ Wawancara mendalam tokoh</div>
+        <div class="fact-chip teal">🖼️ Perbandingan foto berkala</div>
+        <div class="fact-chip blue">📄 Laporan akhir terstruktur</div>
+      </div>
+    </div>
+
+    <div class="alert-box warning">
+      <div class="alert-icon">⚠️</div>
+      <div class="alert-text"><strong>Jangan hanya hitung yang berhasil!</strong> Evaluasi yang jujur juga mencatat kegagalan dan penyebabnya. Bibit yang mati, partisipasi yang rendah, atau target yang tidak tercapai adalah data berharga yang membantu program selanjutnya menjadi lebih baik. Kegagalan yang terdokumentasi lebih bernilai daripada keberhasilan yang dilebih-lebihkan.</div>
+    </div>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-period">Akhir minggu ke-2 (selama KKN)</div>
+        <div class="tl-title">Evaluasi baseline dan penanaman</div>
+        <div class="tl-body">Review kondisi awal bibit, kesesuaian lokasi, dan kelengkapan data penanaman. Identifikasi masalah awal dan lakukan perbaikan segera.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot amber"></div>
+        <div class="tl-period amber">Akhir masa KKN (hari ke-40)</div>
+        <div class="tl-title">Evaluasi akhir KKN + serah terima</div>
+        <div class="tl-body">Presentasi hasil program kepada masyarakat dan pemerintah desa. Serahkan SOP pemeliharaan, data monitoring awal, dan modul pelatihan enumerator kepada kelompok lokal yang ditunjuk. Dokumentasikan momen serah terima sebagai bagian dari FORSA DIGITAL.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot teal"></div>
+        <div class="tl-period teal">Bulan ke-3 (pasca KKN)</div>
+        <div class="tl-title">Evaluasi pertengahan — survei survival rate</div>
+        <div class="tl-body">Tim KKN bersama enumerator lokal melakukan survei survival rate. Data dikirim ke tim UGM untuk dianalisis. Jika SR di bawah 70%, identifikasi penyebab dan rekomendasikan penyulaman.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot blue"></div>
+        <div class="tl-period blue">Bulan ke-12 (evaluasi tahunan)</div>
+        <div class="tl-title">Evaluasi komprehensif tahunan</div>
+        <div class="tl-body">Analisis menyeluruh semua indikator ekologis, sosial, dan dokumentasi. Susun laporan evaluasi tahunan yang dapat dipublikasikan sebagai artikel ilmiah atau policy brief untuk mendukung kebijakan konservasi pesisir Sebatik.</div>
+      </div>
+    </div>
+
+    <div class="dialog-scene">
+      <div class="dialog-title">💬 Refleksi Evaluasi Bersama</div>
+      <div class="dialog-bubble">
+        <div class="avatar av-student">🎓</div>
+        <div class="bubble-wrap">
+          <div class="bubble-name">Mahasiswa KKN PPM UGM</div>
+          <div class="bubble student">Kak, bagaimana kalau ternyata hasil evaluasi menunjukkan survival rate kita hanya 55%? Apakah program kita dianggap gagal?</div>
+        </div>
+      </div>
+      <div class="dialog-bubble right">
+        <div class="avatar av-ranger">🌲</div>
+        <div class="bubble-wrap">
+          <div class="bubble-name">Penyuluh Kehutanan</div>
+          <div class="bubble ranger"><strong>Program rehabilitasi mangrove yang SR-nya 55% bukan gagal — itu adalah PELAJARAN.</strong> Yang penting: kita tahu MENGAPA 45%-nya tidak selamat. Apakah karena lokasi kurang tepat? Jenis bibit? Waktu tanam? Jawaban itu jauh lebih berharga dari angka keberhasilan yang tidak disertai analisis.</div>
+        </div>
+      </div>
+      <div class="dialog-bubble">
+        <div class="avatar av-elder">👴</div>
+        <div class="bubble-wrap">
+          <div class="bubble-name">Kakek Daud</div>
+          <div class="bubble elder">Petani di sini pun tidak selalu berhasil panen. Yang penting setelah gagal, kita tahu kenapa — dan musim depan kita tanam lebih cerdas. <em>Akar yang kuat tidak tumbuh dalam sehari.</em> Begitu pun program konservasi.</div>
+        </div>
+      </div>
+      <div class="dialog-bubble right">
+        <div class="avatar av-student">🎓</div>
+        <div class="bubble-wrap">
+          <div class="bubble-name">Mahasiswa KKN PPM UGM</div>
+          <div class="bubble student">Saya setuju. Dan semua cerita ini — keberhasilan maupun kegagalan — akan kita dokumentasikan jujur di FORSA DIGITAL. Karena kejujuran data adalah fondasi dari ilmu pengetahuan dan kepercayaan masyarakat! 📊🌿</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cta-block">
+      <div class="big-text">🌳 Tanam hari ini, panen masa depan Sebatik!</div>
+      <div class="sub-text">Setiap bibit yang ditanam, dipelihara, dipantau, dan dievaluasi dengan serius oleh Tim KKN PPM UGM Taka Sebatik 2026 adalah bukti nyata bahwa ilmu pengetahuan bisa mengubah garis pantai — dan mengubah masa depan masyarakat pesisir. FORSA DIGITAL merekam setiap langkah perjalanan itu.</div>
+    </div>
+
+    <div class="source-box">
+      <div class="source-title">📚 Referensi Evaluasi</div>
+      <div class="source-item">Primavera, J.H. &amp; Esteban, J.M.A. (2008). A review of mangrove rehabilitation in the Philippines. <em>Hydrobiologia</em>, 637(1), 45–59.</div>
+      <div class="source-item">Kauffman, J.B. &amp; Donato, D.C. (2012). <em>Protocols for the measurement, monitoring and reporting of structure, biomass and carbon stocks in mangrove forests</em>. Bogor: CIFOR.</div>
+      <div class="source-item">Walters, B.B. et al. (2008). Ethnobiology, socio-economics and management of mangrove forests. <em>Aquatic Botany</em>, 89(2), 220–236.</div>
+      <div class="source-item">IUCN. (2015). <em>A Guide to Mangrove Restoration</em>. Gland: IUCN.</div>
+      <div class="source-item">BPDAS-HL Mahakam Berau. (2020). <em>Pedoman Teknis Rehabilitasi Mangrove di Kalimantan</em>. Samarinda: KLHK.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const pages=['p0','p1','p2','p3'];
+const navBtns=document.querySelectorAll('.nav-btn');
+const pct=[25,50,75,100];
+function goPage(i){
+  pages.forEach(p=>document.getElementById(p).classList.remove('active'));
+  navBtns.forEach(b=>b.classList.remove('active'));
+  document.getElementById(pages[i]).classList.add('active');
+  navBtns[i].classList.add('active');
+  document.getElementById('progress').style.width=pct[i]+'%';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
