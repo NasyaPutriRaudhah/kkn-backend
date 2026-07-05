@@ -1,0 +1,49 @@
+{
+  "kind": "collectionType",
+  "collectionName": "villages",
+  "info": {
+    "singularName": "village",
+    "pluralName": "villages",
+    "displayName": "village"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "tagline": {
+      "type": "string"
+    },
+    "description": {
+      "type": "richtext"
+    },
+    "population": {
+      "type": "string"
+    },
+    "area": {
+      "type": "string"
+    },
+    "geo_type": {
+      "type": "string",
+      "default": "Desa"
+    },
+    "features": {
+      "type": "text",
+      "regex": "comma seperated "
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "kind": "singleType",
+  "collectionName": "profils",
+  "info": {
+    "singularName": "profil",
+    "pluralName": "profils",
+    "displayName": "Profil"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "visi": {
+      "type": "richtext",
+      "required": true
+    },
+    "misi": {
+      "type": "richtext",
+      "required": true
+    }
+  }
+}

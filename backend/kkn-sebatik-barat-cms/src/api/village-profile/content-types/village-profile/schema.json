@@ -1,0 +1,42 @@
+{
+  "kind": "singleType",
+  "collectionName": "village_profiles",
+  "info": {
+    "singularName": "village-profile",
+    "pluralName": "village-profiles",
+    "displayName": "village-profile"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "district_name": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "richtext",
+      "required": true
+    },
+    "vision": {
+      "type": "richtext"
+    },
+    "mission": {
+      "type": "richtext"
+    },
+    "map_embed": {
+      "type": "text"
+    },
+    "hero_image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    }
+  }
+}

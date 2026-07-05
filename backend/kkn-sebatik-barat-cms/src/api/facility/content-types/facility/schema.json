@@ -1,0 +1,48 @@
+{
+  "kind": "collectionType",
+  "collectionName": "facilities",
+  "info": {
+    "singularName": "facility",
+    "pluralName": "facilities",
+    "displayName": "facility"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "Pendidikan",
+        "Olahraga",
+        "Kesehatan",
+        "Transportasi ",
+        "Ibadah"
+      ]
+    },
+    "description": {
+      "type": "richtext"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "desa_location": {
+      "type": "string"
+    },
+    "google_maps_link": {
+      "type": "text"
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "kind": "collectionType",
+  "collectionName": "produk-hukums",
+  "info": {
+    "singularName": "produk-hukum",
+    "pluralName": "produk-hukums",
+    "displayName": "Produk Hukum"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "nama_dokumen": {
+      "type": "string",
+      "required": true
+    },
+    "file": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "files"
+      ]
+    }
+  }
+}
