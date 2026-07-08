@@ -693,6 +693,10 @@ export interface ApiProdukHukumProdukHukum extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    desa: Schema.Attribute.Enumeration<
+      ['Setabu', 'Bambangan', 'Tembaring', 'Binalawan', 'Liang Bunyu']
+    > &
+      Schema.Attribute.Required;
     file: Schema.Attribute.Media<'files'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<

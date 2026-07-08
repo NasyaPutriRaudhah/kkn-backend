@@ -21,6 +21,17 @@
       "allowedTypes": [
         "files"
       ]
+    },
+    "desa": {
+      "type": "enumeration",
+      "enum": [
+        "Setabu",
+        "Bambangan",
+        "Tembaring",
+        "Binalawan",
+        "Liang Bunyu"
+      ],
+      "required": true
     }
   }
 }
